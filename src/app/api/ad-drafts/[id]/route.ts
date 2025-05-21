@@ -4,8 +4,9 @@ import { cookies } from 'next/headers';
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
+  const { params } = context;
   try {
     const supabase = createRouteHandlerClient({ cookies });
     
