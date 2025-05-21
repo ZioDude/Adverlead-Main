@@ -51,6 +51,7 @@ export default function ExpandedImageView({ src, onClose }: ExpandedImageViewPro
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleCloseClick = (_e: React.MouseEvent) => {
     // e.stopPropagation() is no longer strictly needed here for the original problem.
     // The pointerdown capture listener already stops propagation to the document.

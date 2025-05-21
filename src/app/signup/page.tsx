@@ -18,6 +18,7 @@ export default function SignUpPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _router = useRouter();
   const supabase = createClientComponentClient();
 
@@ -34,6 +35,7 @@ export default function SignUpPage() {
     }
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { error, data: _data } = await supabase.auth.signUp({
         email,
         password,
@@ -53,6 +55,7 @@ export default function SignUpPage() {
       setEmail('');
       setPassword('');
       setConfirmPassword('');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_err) {
       setError('An unexpected error occurred');
     } finally {

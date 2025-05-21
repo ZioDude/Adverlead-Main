@@ -27,6 +27,7 @@ export default function AdDraftDetailsDialog({
   draft, 
   isOpen,
   onClose,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   expandedImage: _expandedImage,
   onExpandImage
 }: AdDraftDetailsDialogProps) {
