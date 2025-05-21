@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from "@/lib/utils";
-import { useMemo } from "react";
+// import { useMemo } from "react"; // useMemo no longer needed
 
 interface AnimatedGridPatternProps {
   width?: number;
@@ -20,12 +20,12 @@ export function AnimatedGridPattern({
   numSquares = 8,  // Reduced for a less busy look
   className,
 }: AnimatedGridPatternProps) {
-  const columns = useMemo(() => {
-    return Array(width).fill(0);
-  }, [width]);
-  const rows = useMemo(() => {
-    return Array(height).fill(0);
-  }, [height]);
+  // const columns = useMemo(() => { // Removed
+  //   return Array(width).fill(0);
+  // }, [width]);
+  // const rows = useMemo(() => { // Removed
+  //   return Array(height).fill(0);
+  // }, [height]);
 
   return (
     <div
