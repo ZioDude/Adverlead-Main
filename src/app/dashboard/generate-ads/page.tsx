@@ -8,8 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
-  DialogClose
 } from "@/components/ui/dialog";
 import AdvancedAdBuilderDialogContent from "@/components/dashboard/AdvancedAdBuilderDialogContent";
 import { useState } from "react";
