@@ -75,11 +75,11 @@ export default function SignUpPage() {
               <CheckCircle2 className="h-4 w-4" />
               <AlertTitle>Verification email sent!</AlertTitle>
               <AlertDescription>
-                We've sent a verification link to {email}. Please check your email and click the link to verify your account.
+                We&apos;ve sent a verification link to {email}. Please check your email and click the link to verify your account.
               </AlertDescription>
             </Alert>
             <p className="text-center text-sm text-muted-foreground">
-              Didn't receive the email? Check your spam folder or{' '}
+              Didn&apos;t receive the email? Check your spam folder or{' '}
               <button
                 onClick={handleSignUp}
                 className="text-primary hover:underline"
