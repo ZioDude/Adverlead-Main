@@ -28,7 +28,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-card/80 backdrop-blur-md text-card-foreground p-4 shadow-md sticky top-0 z-50">
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold text-primary">
           Adverlead
         </Link>

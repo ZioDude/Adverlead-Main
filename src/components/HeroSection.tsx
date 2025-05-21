@@ -4,20 +4,20 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { AuroraBackground } from "@/components/magicui/aurora-background";
 import AnimatedShinyText from "@/components/magicui/animated-shiny-text";
-import AnimatedGridPattern from "@/components/magicui/animated-grid-pattern";
-import { ArrowRight, Network } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Globe from "@/components/magicui/globe";
 
 export default function HeroSection() {
   return (
     <>
       <AuroraBackground showRadialGradient={true} />
       <section 
-        className="relative z-0 container mx-auto px-4 py-16 md:py-24 flex flex-col justify-center min-h-[calc(100vh-80px)]"
+        className="relative px-4 py-16 md:py-24 flex flex-col justify-center min-h-[calc(100vh-80px)] overflow-x-hidden"
       >
-        <div className="grid md:grid-cols-2 gap-x-12 gap-y-10 items-center">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-x-12 gap-y-10 items-center">
           {/* Left Column: Text Content & CTAs */}
-          <div className="text-center md:text-left">
+          <div className="text-center md:text-left z-10">
             <AnimatedShinyText
               className={cn(
                 "mb-2 text-lg inline-flex items-center justify-center md:justify-start",
@@ -51,16 +51,10 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right Column: Visual with AnimatedGridPattern and Icon */}
-          <div className="hidden md:flex justify-center items-center min-h-[300px]">
-            <div className="relative w-full max-w-md h-80 bg-card/10 rounded-xl shadow-2xl border border-border/20 overflow-hidden flex items-center justify-center">
-              <AnimatedGridPattern
-                numSquares={12}
-                maxOpacity={0.15}
-                duration={4}
-                className="absolute inset-0 h-full w-full [--grid-color:theme(colors.primary/0.3)]"
-              />
-              <Network className="h-32 w-32 text-primary/70 z-10" strokeWidth={1.5} />
+          {/* Right Column: Globe */}
+          <div className="hidden md:flex items-center justify-center">
+            <div className="relative w-[550px] h-[550px] rounded-full border border-primary/20 overflow-hidden">
+              <Globe />
             </div>
           </div>
         </div>

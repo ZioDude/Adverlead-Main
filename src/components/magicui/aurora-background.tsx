@@ -24,10 +24,10 @@ export const AuroraBackground = ({
     >
       <div
         className={cn(
-          `bg-gradient-to-br from-accent/70 via-primary/50 to-secondary/30 opacity-60 animate-pulse`,
-          `absolute -inset-x-1/4 -inset-y-1/4 will-change-transform`,
+          `bg-gradient-to-br from-accent/90 via-primary/70 to-secondary/60 opacity-80 animate-pulse`,
+          `absolute inset-0 w-full h-full will-change-transform`,
           showRadialGradient &&
-          `[mask-image:radial-gradient(ellipse_at_30%_30%,black_0%,transparent_70%)]`
+          `[mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)]`
         )}
       ></div>
     </div>
