@@ -84,9 +84,8 @@ async function fetchGeneratedImages(houseStyleLabel: string): Promise<GeneratedI
   console.log(`Simulating image generation for: ${houseStyleLabel}`);
   return new Promise((resolve) => {
     setTimeout(() => {
-      const images = imageViews.map((view, index) => ({
+      const images = imageViews.map((view) => ({
         view,
-        // Use a consistent seed for picsum.photos based on style and view for more deterministic placeholders
         src: `https://picsum.photos/seed/${encodeURIComponent(houseStyleLabel)}-${encodeURIComponent(view)}/600/400`,
         alt: `${houseStyleLabel} - ${view}`,
       }));
@@ -302,8 +301,8 @@ export default function AdvancedAdBuilderDialogContent({ onClose }: AdvancedAdBu
             <div className={cn("w-full max-w-lg pt-4 transition-opacity duration-700 ease-in-out", showCarousel ? "opacity-100" : "opacity-0")}>
               <Carousel className="w-full">
                 <CarouselContent>
-                  {generatedImages.map((image, index) => (
-                    <CarouselItem key={index} className="flex flex-col items-center justify-center">
+                  {generatedImages.map((image) => (
+                    <CarouselItem key={image.src} className="flex flex-col items-center justify-center">
                       <div className="p-1 w-full aspect-[3/2] relative">
                         <Image 
                           src={image.src} 

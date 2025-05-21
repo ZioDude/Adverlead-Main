@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Megaphone, Facebook, Users, Settings, LogOut, HomeIcon, Zap } from "lucide-react"; // Added icons
+import { LayoutDashboard, /*Megaphone,*/ Facebook, Users, Settings, LogOut, HomeIcon, Zap } from "lucide-react"; // Commented out Megaphone
 
 // Define navigation items for the dashboard sidebar
 const dashboardNavItems = [
