@@ -11,22 +11,22 @@ interface GlobeProps {
 
 export default function Globe({ className }: GlobeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const globeInstanceRef = useRef<any>(null);
+  const globeInstanceRef = useRef<any | null>(null);
   const pointerInteracting = useRef<number | null>(null);
   const pointerInteractionMovement = useRef(0);
-  const lastPhi = useRef(0); // Store the last phi from interaction
-  const lastTheta = useRef(0.3); // Store the last theta from interaction
+  const lastPhi = useRef(0);
+  const lastTheta = useRef(0.3);
 
   useEffect(() => {
+    const currentCanvas = canvasRef.current;
     let width = 0;
-    let phi = lastPhi.current; // Start with last known phi
-    let theta = lastTheta.current; // Start with last known theta
+    let phi = lastPhi.current;
+    const theta = lastTheta.current;
     let isInteracting = false;
-    let animationFrameId: number;
 
     const onResize = () => {
-      if (canvasRef.current) {
-        width = canvasRef.current.offsetWidth;
+      if (currentCanvas) {
+        width = currentCanvas.offsetWidth;
         if (globeInstanceRef.current) {
           globeInstanceRef.current.onResize();
         }
@@ -36,19 +36,18 @@ export default function Globe({ className }: GlobeProps) {
     window.addEventListener('resize', onResize);
     onResize();
 
-    if (!canvasRef.current) return;
+    if (!currentCanvas) return;
 
     const onPointerDown = (e: PointerEvent) => {
       isInteracting = true;
       pointerInteracting.current = e.clientX - pointerInteractionMovement.current;
-      canvasRef.current!.style.cursor = 'grabbing';
+      if (currentCanvas) currentCanvas.style.cursor = 'grabbing';
     };
 
     const onPointerUp = () => {
       isInteracting = false;
       pointerInteracting.current = null;
-      canvasRef.current!.style.cursor = 'grab';
-      // Save the current phi/theta when interaction stops
+      if (currentCanvas) currentCanvas.style.cursor = 'grab';
       if (globeInstanceRef.current) {
         lastPhi.current = globeInstanceRef.current.phi;
         lastTheta.current = globeInstanceRef.current.theta;
@@ -56,10 +55,10 @@ export default function Globe({ className }: GlobeProps) {
     };
 
     const onPointerOut = () => {
-      if (isInteracting) { // Only reset if actively interacting
+      if (isInteracting) {
         isInteracting = false;
         pointerInteracting.current = null;
-        canvasRef.current!.style.cursor = 'grab';
+        if (currentCanvas) currentCanvas.style.cursor = 'grab';
         if (globeInstanceRef.current) {
           lastPhi.current = globeInstanceRef.current.phi;
           lastTheta.current = globeInstanceRef.current.theta;
@@ -71,25 +70,23 @@ export default function Globe({ className }: GlobeProps) {
       if (pointerInteracting.current !== null) {
         const delta = e.clientX - pointerInteracting.current;
         pointerInteractionMovement.current = delta;
-        phi = lastPhi.current + (delta / 200); // Adjust rotation sensitivity
-        // Optionally, you could add theta (vertical) rotation here too
-        // theta = lastTheta.current + ( (e.clientY - pointerInteractingY.current) / 200 );
+        phi = lastPhi.current + (delta / 200);
       }
     };
 
-    canvasRef.current.addEventListener('pointerdown', onPointerDown);
+    currentCanvas.addEventListener('pointerdown', onPointerDown);
     window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('pointerup', onPointerUp);
-    canvasRef.current.addEventListener('pointerout', onPointerOut);
+    currentCanvas.addEventListener('pointerout', onPointerOut);
 
-    const baseColor: [number, number, number] = [0.5, 0.2, 0.8]; 
+    const baseColor: [number, number, number] = [0.5, 0.2, 0.8];
     const markerColor: [number, number, number] = [0.95, 0.1, 0.5];
     const glowColor: [number, number, number] = [0.5, 0.2, 0.8];
 
-    globeInstanceRef.current = createGlobe(canvasRef.current, {
+    globeInstanceRef.current = createGlobe(currentCanvas, {
       devicePixelRatio: 1.5,
       width: width * 2,
-      height: width * 2, // Keep it square for a sphere
+      height: width * 2,
       phi: phi,
       theta: theta,
       dark: 0.8,
@@ -111,31 +108,32 @@ export default function Globe({ className }: GlobeProps) {
       ],
       onRender: (state) => {
         if (!isInteracting) {
-          phi += 0.003; // Auto-rotate
+          phi += 0.003;
         }
         state.phi = phi;
-        state.theta = theta; // Keep theta, or update if vertical drag is added
+        state.theta = theta;
         state.width = width * 2;
         state.height = width * 2;
       },
     });
 
     setTimeout(() => {
-      if (canvasRef.current) {
-        canvasRef.current.style.opacity = "1";
+      if (currentCanvas) {
+        currentCanvas.style.opacity = "1";
       }
     }, 100);
 
     return () => {
       if (globeInstanceRef.current) {
         globeInstanceRef.current.destroy();
+        globeInstanceRef.current = null;
       }
       window.removeEventListener('resize', onResize);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', onPointerUp);
-      if (canvasRef.current) {
-        canvasRef.current.removeEventListener('pointerdown', onPointerDown);
-        canvasRef.current.removeEventListener('pointerout', onPointerOut);
+      if (currentCanvas) {
+        currentCanvas.removeEventListener('pointerdown', onPointerDown);
+        currentCanvas.removeEventListener('pointerout', onPointerOut);
       }
     };
   }, []);
@@ -146,7 +144,7 @@ export default function Globe({ className }: GlobeProps) {
         ref={canvasRef}
         style={{
           width: "100%",
-          height: "100%", 
+          height: "100%",
           cursor: "grab",
           contain: "layout paint size",
           opacity: 0,
