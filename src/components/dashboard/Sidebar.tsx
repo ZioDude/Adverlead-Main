@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Megaphone, Facebook, Users, Settings, LogOut, HomeIcon } from "lucide-react"; // Added icons
+import { LayoutDashboard, Megaphone, Facebook, Users, Settings, LogOut, HomeIcon, Zap } from "lucide-react"; // Added icons
 
 // Define navigation items for the dashboard sidebar
 const dashboardNavItems = [
   { href: "/dashboard", label: "Overview", icon: <LayoutDashboard className="h-5 w-5" /> },
   { href: "/", label: "Homepage", icon: <HomeIcon className="h-5 w-5" /> },
-  { href: "/dashboard/generate-ads", label: "Generate Ads", icon: <Megaphone className="h-5 w-5" /> },
+  { href: "/dashboard/generate-ads", label: "Generate Ads", icon: <Zap className="h-5 w-5" /> },
   { href: "/dashboard/campaigns", label: "Facebook", icon: <Facebook className="h-5 w-5" /> }, // Assuming Facebook maps to Campaigns
   { href: "/dashboard/leads", label: "Leads", icon: <Users className="h-5 w-5" /> },
 ];
