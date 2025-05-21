@@ -20,7 +20,7 @@ interface TypingTextProps {
   typingSpeed?: number;
   onFinished?: () => void;
   className?: string;
-  key?: string | number; 
+  textKey?: string | number; // Changed from key to textKey
 }
 
 const TypingText: React.FC<TypingTextProps> = ({ 
@@ -29,7 +29,7 @@ const TypingText: React.FC<TypingTextProps> = ({
   typingSpeed = 50, 
   onFinished,
   className,
-  key 
+  textKey // Changed from key to textKey
 }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -41,7 +41,7 @@ const TypingText: React.FC<TypingTextProps> = ({
       setIsTyping(true);
     }, startDelay);
     return () => clearTimeout(startTimer);
-  }, [startDelay, text, key]);
+  }, [startDelay, text, textKey]); // Changed from key to textKey
 
   useEffect(() => {
     if (!isTyping || !text) return;
@@ -79,20 +79,32 @@ interface GeneratedImage {
   alt: string;
 }
 
-// Simulate API call for image generation
+// Updated to call the backend API route
 async function fetchGeneratedImages(houseStyleLabel: string): Promise<GeneratedImage[]> {
-  console.log(`Simulating image generation for: ${houseStyleLabel}`);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const images = imageViews.map((view) => ({
-        view,
-        src: `https://picsum.photos/seed/${encodeURIComponent(houseStyleLabel)}-${encodeURIComponent(view)}/600/400`,
-        alt: `${houseStyleLabel} - ${view}`,
-      }));
-      console.log("Simulated images:", images);
-      resolve(images);
-    }, 3000); // Simulate 3-second generation time
-  });
+  console.log(`[Frontend] Calling API to generate images for: ${houseStyleLabel}`);
+  try {
+    const response = await fetch('/api/generate-images', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ houseStyleLabel }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `API request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("[Frontend] Received images from API:", data.images);
+    return data.images || []; // Ensure it returns an array
+  } catch (error) {
+    console.error("[Frontend] Error fetching generated images:", error);
+    // Optionally, re-throw or return a specific error structure to be handled by the UI
+    // For now, returning an empty array or could throw to be caught by handleNext
+    throw error; // Re-throw to be caught by handleNext
+  }
 }
 
 const step1Line1Text = "Hello! I'm your Adverlead Assistant. Let's get started.";
@@ -114,6 +126,9 @@ export default function AdvancedAdBuilderDialogContent({ onClose }: AdvancedAdBu
   const [selectedHouseStyle, setSelectedHouseStyle] = useState<string | null>(null);
   const [isGeneratingImages, setIsGeneratingImages] = useState(false);
   const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
+  const [generationError, setGenerationError] = useState<string | null>(null); // For displaying errors
+  // Track loading state of each image
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
   const [showBotStep, setShowBotStep] = useState(false);
   const [startTypingPrimary, setStartTypingPrimary] = useState(false);
@@ -148,9 +163,8 @@ export default function AdvancedAdBuilderDialogContent({ onClose }: AdvancedAdBu
     currentSelection = selectedHouseStyle;
     setSelection = setSelectedHouseStyle;
   } else if (currentStep === 3 && selectedIndustry === "renovation") {
-    primaryText = step3Line1TextInitial(houseStyleLabel);
-    secondaryText = isGeneratingImages ? "" : step3Line2TextComplete;
-    // No choices for step 3, it's for display
+    primaryText = generationError ? "Oops! Something went wrong." : step3Line1TextInitial(houseStyleLabel);
+    secondaryText = isGeneratingImages ? "" : (generationError ? generationError : step3Line2TextComplete);
   }
 
   // Animation Orchestration
@@ -160,6 +174,7 @@ export default function AdvancedAdBuilderDialogContent({ onClose }: AdvancedAdBu
     setStartTypingSecondary(false);
     setShowChoiceButtons(false);
     setShowCarousel(false); // Reset carousel visibility
+    if(currentStep !== 3) setGenerationError(null); // Clear error if not on step 3
 
     const timerBot = setTimeout(() => setShowBotStep(true), 100);
     const timerPrimary = setTimeout(() => setStartTypingPrimary(true), 600);
@@ -171,47 +186,88 @@ export default function AdvancedAdBuilderDialogContent({ onClose }: AdvancedAdBu
   }, [currentStep]);
 
   const handlePrimaryTextFinished = () => {
-    if (currentStep === 3 && isGeneratingImages) return; // Don't type secondary if generating
+    if (currentStep === 3 && isGeneratingImages) return; 
+    if (currentStep === 3 && generationError) return; // Don't type secondary if error shown in primary
     setTimeout(() => setStartTypingSecondary(true), 200);
   };
 
   const handleSecondaryTextFinished = () => {
     if (currentStep === 1 || currentStep === 2) {
       setTimeout(() => setShowChoiceButtons(true), 300);
-    } else if (currentStep === 3 && !isGeneratingImages && generatedImages.length > 0) {
+    } else if (currentStep === 3 && !isGeneratingImages && generatedImages.length > 0 && !generationError) {
       setTimeout(() => setShowCarousel(true), 300);
     }
   };
   
   const handleNext = async () => {
+    setGenerationError(null); // Clear previous errors
     if (currentStep === 1) {
       if (selectedIndustry === "renovation") {
         setCurrentStep(2);
         setSelectedHouseStyle(null);
-        setGeneratedImages([]); // Clear previous images
+        setGeneratedImages([]); 
       } else {
         if (onClose) onClose();
       }
     } else if (currentStep === 2 && selectedIndustry === "renovation") {
       if (selectedHouseStyle) {
         setIsGeneratingImages(true);
-        setShowChoiceButtons(false); // Hide choices while generating
-        setStartTypingPrimary(true); // Re-trigger primary typing for step 3 initial message
+        setShowChoiceButtons(false); 
+        setStartTypingPrimary(true); 
         setStartTypingSecondary(false);
         setCurrentStep(3);
-        const images = await fetchGeneratedImages(houseStyleLabel);
-        setGeneratedImages(images);
-        setIsGeneratingImages(false);
-        // Secondary text (completion message) and carousel will be triggered via useEffect/onFinished
+        try {
+          const images = await fetchGeneratedImages(houseStyleLabel);
+          setGeneratedImages(images);
+        } catch (error) {
+          console.error("Caught error in handleNext:", error);
+          setGenerationError(error instanceof Error ? error.message : "Failed to generate images.");
+          setGeneratedImages([]); // Clear any potentially partial image set
+        } finally {
+          setIsGeneratingImages(false);
+        }
       }
-    } else if (currentStep === 3) {
-      if (onClose) onClose();
+    } else if (currentStep === 3 || currentStep === totalSteps) { // Modified condition to ensure it covers "Finish"
+      // Save the draft before closing
+      if (selectedIndustry && generatedImages.length > 0) {
+        const draftPayload = {
+          industry: selectedIndustry,
+          house_style: selectedHouseStyle, // This can be null if not applicable
+          generated_images: generatedImages,
+        };
+        try {
+          console.log("[Frontend] Attempting to save ad draft:", draftPayload);
+          const response = await fetch('/api/ad-drafts', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(draftPayload),
+          });
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error("[Frontend] Failed to save draft:", errorData.error || response.statusText);
+            // Optionally, show an error message to the user here
+            setGenerationError(`Failed to save draft: ${errorData.error || response.statusText}`);
+          } else {
+            const result = await response.json();
+            console.log("[Frontend] Draft saved successfully:", result);
+            // Optionally, show a success message or clear form
+          }
+        } catch (error) {
+          console.error("[Frontend] Error saving draft:", error);
+          setGenerationError(error instanceof Error ? `Error saving draft: ${error.message}` : "An unknown error occurred while saving the draft.");
+          // Optionally, show an error message to the user here
+        }
+      }
+      if (onClose) onClose(); // Close the dialog regardless of save success for now
     }
   };
 
   const handlePrev = () => {
+    setGenerationError(null); // Clear errors when navigating
     if (currentStep === 3) {
-      setGeneratedImages([]); // Clear images when going back from step 3
+      setGeneratedImages([]); 
       setIsGeneratingImages(false);
       setCurrentStep(2);
     } else if (currentStep === 2) {
@@ -223,6 +279,24 @@ export default function AdvancedAdBuilderDialogContent({ onClose }: AdvancedAdBu
     (currentStep === 1 && !selectedIndustry) ||
     (currentStep === 2 && selectedIndustry === "renovation" && !selectedHouseStyle) ||
     (currentStep === 3 && isGeneratingImages);
+
+  // Helper function to mark an image as loaded
+  const handleImageLoad = (src: string) => {
+    setLoadedImages(prev => ({
+      ...prev,
+      [src]: true
+    }));
+  };
+
+  // Helper function to handle image error
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>, view: string) => {
+    console.log("Image failed to load, using placeholder:", view);
+    const imgElement = e.currentTarget;
+    const seed = Math.abs(view.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0));
+    imgElement.src = `https://picsum.photos/seed/${seed}/1024/1024`;
+    // Also mark as loaded after setting the placeholder
+    setTimeout(() => handleImageLoad(imgElement.src), 500);
+  };
 
   return (
     <div className="max-w-xl mx-auto p-2 sm:p-4 md:p-6 min-h-[400px]">
@@ -237,21 +311,22 @@ export default function AdvancedAdBuilderDialogContent({ onClose }: AdvancedAdBu
           <Bot 
             className={cn(
               "h-16 w-16 text-primary transition-opacity duration-500 ease-in-out",
-              showBotStep ? "opacity-100" : "opacity-0"
+              showBotStep ? "opacity-100" : "opacity-0",
+              generationError && currentStep === 3 ? "text-destructive" : "text-primary" // Change bot color on error
             )}
           />
           <div className="flex flex-col items-center space-y-1 min-h-[4em]">
             {startTypingPrimary && (
               <TypingText 
-                key={`primary-${currentStep}-${primaryText}`} 
+                textKey={`primary-${currentStep}-${primaryText}`} 
                 text={primaryText} 
                 typingSpeed={40}
-                className="text-lg font-medium text-center"
+                className={cn("text-lg font-medium text-center", generationError && currentStep === 3 ? "text-destructive" : "")}
                 onFinished={handlePrimaryTextFinished}
               />
             )}
             {/* Show loader or secondary text for Step 3 */}
-            {currentStep === 3 && isGeneratingImages && showBotStep && (
+            {currentStep === 3 && isGeneratingImages && showBotStep && !generationError && (
               <div className="flex items-center space-x-2 text-muted-foreground mt-2">
                 <Loader2 className="h-5 w-5 animate-spin" />
                 <span>Generating images... please wait.</span>
@@ -259,10 +334,10 @@ export default function AdvancedAdBuilderDialogContent({ onClose }: AdvancedAdBu
             )}
             {startTypingSecondary && !isGeneratingImages && secondaryText && (
               <TypingText 
-                key={`secondary-${currentStep}-${secondaryText}`} 
+                textKey={`secondary-${currentStep}-${secondaryText}`} 
                 text={secondaryText} 
                 typingSpeed={50}
-                className="text-xl font-semibold text-center"
+                className={cn("text-xl font-semibold text-center", generationError && currentStep === 3 ? "text-destructive" : "")}
                 onFinished={handleSecondaryTextFinished} 
               />
             )}
@@ -297,20 +372,29 @@ export default function AdvancedAdBuilderDialogContent({ onClose }: AdvancedAdBu
           )}
 
           {/* Step 3 Carousel */}
-          {currentStep === 3 && !isGeneratingImages && generatedImages.length > 0 && (
+          {currentStep === 3 && !isGeneratingImages && generatedImages.length > 0 && !generationError && (
             <div className={cn("w-full max-w-lg pt-4 transition-opacity duration-700 ease-in-out", showCarousel ? "opacity-100" : "opacity-0")}>
               <Carousel className="w-full">
                 <CarouselContent>
                   {generatedImages.map((image) => (
                     <CarouselItem key={image.src} className="flex flex-col items-center justify-center">
-                      <div className="p-1 w-full aspect-[3/2] relative">
+                      <div className="p-1 w-full aspect-[3/2] relative bg-muted rounded-md flex items-center justify-center">
                         <Image 
                           src={image.src} 
                           alt={image.alt} 
                           fill 
                           className="rounded-md object-cover"
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          onError={(e) => handleImageError(e, image.view)}
+                          onLoad={() => handleImageLoad(image.src)}
+                          loading="eager"
+                          priority={true}
                         />
+                        {!loadedImages[image.src] && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm rounded-md opacity-50 pointer-events-none">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                          </div>
+                        )}
                       </div>
                       <p className="mt-2 text-sm text-muted-foreground">{image.view}</p>
                     </CarouselItem>

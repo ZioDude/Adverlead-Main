@@ -33,10 +33,18 @@ export default function HeroSection() {
               Adverlead is your all-in-one platform to create, manage, analyze, and convert leads from your Facebook and Instagram campaigns. Stop juggling tools and start maximizing your ROI.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Button 
-                size="lg" 
-                asChild 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg transform transition-transform hover:scale-105 focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background"
+              <Button
+                size="lg"
+                asChild
+                style={{ "--shimmer-width": "80px" } as React.CSSProperties}
+                className={cn(
+                  "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg transform transition-transform hover:scale-105 focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background",
+                  "relative overflow-hidden", // For containing the shimmer
+                  "animate-shimmer bg-no-repeat", // Apply shimmer animation
+                  // Define the shimmer gradient: a light band moving across
+                  "[background-image:linear-gradient(110deg,transparent_40%,rgba(255,255,255,0.4)_50%,transparent_60%)]",
+                  "[background-size:var(--shimmer-width)_100%]" // Control shimmer band size
+                )}
               >
                 <Link href="/signup">Get Started for Free <ArrowRight className="ml-2 h-5 w-5" /></Link>
               </Button>

@@ -1,9 +1,10 @@
 'use client';
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, /*Megaphone,*/ Facebook, Users, Settings, LogOut, HomeIcon, Zap } from "lucide-react"; // Commented out Megaphone
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 // Define navigation items for the dashboard sidebar
 const dashboardNavItems = [
@@ -20,6 +21,28 @@ const secondaryNavItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const supabase = createClientComponentClient();
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        router.push('/');
+        router.refresh();
+      } else {
+        console.error('Logout failed:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
 
   return (
     <aside className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-sidebar/80 backdrop-blur-md border-r border-sidebar-border flex flex-col">
@@ -59,13 +82,13 @@ export default function Sidebar() {
                     <span className="ms-3">{item.label}</span>
                 </Link>
             ))}
-            <Link
-                href="/api/auth/logout" // Example logout path
-                className="flex items-center p-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group"
+            <button
+                onClick={handleLogout}
+                className="flex items-center p-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group w-full"
             >
                 <LogOut className="h-5 w-5" />
                 <span className="ms-3">Logout</span>
-            </Link>
+            </button>
         </div>
       </div>
     </aside>
