@@ -11,6 +11,7 @@ interface GlobeProps {
 
 export default function Globe({ className }: GlobeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const globeInstanceRef = useRef<any | null>(null);
   const pointerInteracting = useRef<number | null>(null);
   const pointerInteractionMovement = useRef(0);
