@@ -48,7 +48,7 @@ export default function DashboardPage() {
       {/* Performance Summary Widgets */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {summaryMetrics.map((metric) => (
-          <Card key={metric.title} className="bg-card border-border shadow-sm hover:shadow-primary/20 transition-shadow">
+          <Card key={metric.title} className="bg-card/80 backdrop-blur-md border-border shadow-sm hover:shadow-primary/20 transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 {metric.title}
@@ -67,7 +67,7 @@ export default function DashboardPage() {
 
       {/* Active Campaigns & Recent Leads (Example Structure) */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="lg:col-span-4 bg-card border-border shadow-sm">
+        <Card className="lg:col-span-4 bg-card/80 backdrop-blur-md border-border shadow-sm">
           <CardHeader>
             <CardTitle className="text-xl text-foreground">Active Campaigns</CardTitle>
             <CardDescription className="text-muted-foreground">Overview of your currently running campaigns.</CardDescription>
@@ -105,7 +105,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-3 bg-card border-border shadow-sm">
+        <Card className="lg:col-span-3 bg-card/80 backdrop-blur-md border-border shadow-sm">
           <CardHeader>
             <CardTitle className="text-xl text-foreground">Recent Leads</CardTitle>
             <CardDescription className="text-muted-foreground">A snapshot of recently captured leads.</CardDescription>

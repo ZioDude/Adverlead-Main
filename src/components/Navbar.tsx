@@ -20,11 +20,6 @@ export default function Navbar() {
 
   const navItems = [
     { href: '/', label: 'Home' },
-    { href: '/how-it-works', label: 'How it Works' },
-    { href: '/pricing', label: 'Pricing' },
-    { href: '/about-us', label: 'About Us' },
-    { href: '/faq', label: 'FAQ' },
-    { href: '/contact', label: 'Contact' },
   ];
 
   const handleLinkClick = () => {
@@ -32,7 +27,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-card text-card-foreground p-4 shadow-md sticky top-0 z-50">
+    <nav className="bg-card/80 backdrop-blur-md text-card-foreground p-4 shadow-md sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold text-primary">
           Adverlead
@@ -82,21 +77,19 @@ export default function Navbar() {
                 <SheetTitle className="text-2xl text-primary">Adverlead</SheetTitle>
               </SheetHeader>
               <div className="flex flex-col space-y-3">
-                {navItems.map((item) => (
-                  <SheetClose asChild key={item.href}>
+                <SheetClose asChild>
                     <Link
-                      href={item.href}
+                      href="/"
                       onClick={handleLinkClick}
                       className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                        pathname === item.href
+                        pathname === '/'
                           ? 'bg-primary/10 text-primary'
                           : 'text-muted-foreground hover:bg-accent/10 hover:text-primary'
                       }`}
                     >
-                      {item.label}
+                      Home
                     </Link>
                   </SheetClose>
-                ))}
                 <SheetClose asChild>
                     <Link
                       href="/dashboard"

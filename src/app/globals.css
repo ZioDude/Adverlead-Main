@@ -44,120 +44,85 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  /* Theme: High Contrast Dark Purple */
-  --background: oklch(0.03 0 0); /* Deep dark, near black */
-  --foreground: oklch(0.96 0 0); /* Brighter off-white for text */
-
-  --card: oklch(0.07 0 0); /* Dark card, slightly lighter than bg */
-  --card-foreground: oklch(0.96 0 0);
-
-  --popover: oklch(0.07 0 0);
-  --popover-foreground: oklch(0.96 0 0);
-
-  /* Theme: Vibrant Purple accents */
-  --primary: oklch(0.65 0.22 285); /* Vibrant Purple */
-  --primary-foreground: oklch(0.99 0 0); /* Almost pure white for max contrast */
-
-  --secondary: oklch(0.55 0.18 280); /* Slightly less vibrant, darker Purple */
-  --secondary-foreground: oklch(0.99 0 0);
-
-  --muted: oklch(0.12 0 0); /* Darker grey for muted elements */
-  --muted-foreground: oklch(0.65 0 0); /* Lighter grey for muted text, adjusted for contrast */
-
-  --accent: oklch(0.7 0.24 290); /* Bright, vibrant Purple for accents */
-  --accent-foreground: oklch(0.03 0 0); /* Dark text on bright accent for contrast */
-
-  --destructive: oklch(0.55 0.22 15); /* A strong, contrasting red */
-  --border: oklch(0.15 0 0); /* Darker border */
-  --input: oklch(0.15 0 0); /* Darker input background */
-  --ring: oklch(0.7 0.24 290); /* Accent Purple for focus rings */
-
-  /* Chart colors with more vibrancy */
-  --chart-1: oklch(0.65 0.22 285);  /* Primary Purple */
-  --chart-2: oklch(0.7 0.24 290);   /* Accent Purple */
-  --chart-3: oklch(0.55 0.18 280);  /* Secondary Purple */
-  --chart-4: oklch(0.75 0.26 295);  /* Lighter, more vibrant purple */
-  --chart-5: oklch(0.5 0.16 275);   /* Deeper, slightly bluer purple */
+  --radius-root: 0.75rem; 
+  --background-root: oklch(0.08 0.005 260);
+  --foreground-root: oklch(0.97 0 0);
+  --card-root: oklch(0.15 0.01 260 / 60%);
+  --card-foreground-root: oklch(0.97 0 0);
+  --popover-root: oklch(0.12 0.01 260 / 80%);
+  --popover-foreground-root: oklch(0.97 0 0);
   
-  --sidebar: oklch(0.05 0 0); /* Slightly off-black for sidebar */
-  --sidebar-foreground: oklch(0.96 0 0);
-  --sidebar-primary: oklch(0.65 0.22 285); 
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.7 0.24 290);
-  --sidebar-accent-foreground: oklch(0.03 0 0);
-  --sidebar-border: oklch(0.15 0 0);
-  --sidebar-ring: oklch(0.7 0.24 290);
+  /* Main action color is now the pinkish purple */
+  --primary-root: oklch(0.68 0.26 315);      /* Pinkish-Purple */
+  --primary-foreground-root: oklch(0.99 0 0);
+
+  /* Secondary color (can be a more traditional purple or other accent) */
+  --secondary-root: oklch(0.60 0.20 285);   /* Slightly less vibrant purple */
+  --secondary-foreground-root: oklch(0.99 0 0);
+  
+  --muted-root: oklch(0.2 0.01 260 / 50%);
+  --muted-foreground-root: oklch(0.68 0.005 260);
+  
+  /* Accent can be the same as primary if we want one dominant highlight, or a different color */
+  --accent-root: oklch(0.68 0.26 315);        /* Pinkish-Purple (same as primary for now) */
+  --accent-foreground-root: oklch(0.99 0 0); 
+
+  --destructive-root: oklch(0.58 0.24 15);
+  --border-root: oklch(0.4 0.01 260 / 40%);
+  --input-root: oklch(0.2 0.01 260 / 50%);
+  --ring-root: oklch(0.68 0.26 315 / 70%); /* Pinkish-Purple for focus rings */
+
+  --sidebar-root: oklch(0.12 0.01 260 / 75%);
+  --sidebar-foreground-root: oklch(0.85 0.005 260);
+  --sidebar-primary-root: var(--primary-root); /* Active sidebar item now uses the main pinkish-purple */
+  --sidebar-primary-foreground-root: var(--primary-foreground-root);
+  --sidebar-accent-root: oklch(0.25 0.01 260 / 50%);
+  --sidebar-accent-foreground-root: var(--foreground-root);
+  --sidebar-border-root: oklch(0.3 0.01 260 / 20%);
+  --sidebar-ring-root: var(--ring-root);
+  
+  --chart-1-root: var(--primary-root);
+  --chart-2-root: oklch(0.7 0.2 270);    /* A different purple for charts */
+  --chart-3-root: oklch(0.65 0.25 330);  /* A more magenta shade */
+  --chart-4-root: oklch(0.55 0.18 280);  /* A deeper traditional purple */
+  --chart-5-root: oklch(0.75 0.15 240);
 }
 
-/* Forcing dark theme as default for now */
+/* Apply :root variables to html, body ensure no direct oklch values here */
 html, body {
-  --background: oklch(0.03 0 0);
-  --foreground: oklch(0.96 0 0);
-  --card: oklch(0.07 0 0);
-  --card-foreground: oklch(0.96 0 0);
-  --popover: oklch(0.07 0 0);
-  --popover-foreground: oklch(0.96 0 0);
-  --primary: oklch(0.65 0.22 285);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.55 0.18 280);
-  --secondary-foreground: oklch(0.99 0 0);
-  --muted: oklch(0.12 0 0);
-  --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.7 0.24 290);
-  --accent-foreground: oklch(0.03 0 0);
-  --destructive: oklch(0.55 0.22 15);
-  --border: oklch(0.15 0 0);
-  --input: oklch(0.15 0 0);
-  --ring: oklch(0.7 0.24 290);
-  --chart-1: oklch(0.65 0.22 285);
-  --chart-2: oklch(0.7 0.24 290);
-  --chart-3: oklch(0.55 0.18 280);
-  --chart-4: oklch(0.75 0.26 295);
-  --chart-5: oklch(0.5 0.16 275);
-  --sidebar: oklch(0.05 0 0);
-  --sidebar-foreground: oklch(0.96 0 0);
-  --sidebar-primary: oklch(0.65 0.22 285);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.7 0.24 290);
-  --sidebar-accent-foreground: oklch(0.03 0 0);
-  --sidebar-border: oklch(0.15 0 0);
-  --sidebar-ring: oklch(0.7 0.24 290);
+  --radius: var(--radius-root);
+  --background: var(--background-root);
+  --foreground: var(--foreground-root);
+  --card: var(--card-root);
+  --card-foreground: var(--card-foreground-root);
+  --popover: var(--popover-root);
+  --popover-foreground: var(--popover-foreground-root);
+  --primary: var(--primary-root);
+  --primary-foreground: var(--primary-foreground-root);
+  --secondary: var(--secondary-root);
+  --secondary-foreground: var(--secondary-foreground-root);
+  --muted: var(--muted-root);
+  --muted-foreground: var(--muted-foreground-root);
+  --accent: var(--accent-root);
+  --accent-foreground: var(--accent-foreground-root);
+  --destructive: var(--destructive-root);
+  --border: var(--border-root);
+  --input: var(--input-root);
+  --ring: var(--ring-root);
+  --sidebar: var(--sidebar-root);
+  --sidebar-foreground: var(--sidebar-foreground-root);
+  --sidebar-primary: var(--sidebar-primary-root);
+  --sidebar-primary-foreground: var(--sidebar-primary-foreground-root);
+  --sidebar-accent: var(--sidebar-accent-root);
+  --sidebar-accent-foreground: var(--sidebar-accent-foreground-root);
+  --sidebar-border: var(--sidebar-border-root);
+  --sidebar-ring: var(--sidebar-ring-root);
+  --chart-1: var(--chart-1-root);
+  --chart-2: var(--chart-2-root);
+  --chart-3: var(--chart-3-root);
+  --chart-4: var(--chart-4-root);
+  --chart-5: var(--chart-5-root);
 }
-
-/* .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-} */
 
 @layer base {
   * {

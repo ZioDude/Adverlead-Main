@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Megaphone, Facebook, Users, Settings, LogOut } from "lucide-react"; // Added icons
+import { LayoutDashboard, Megaphone, Facebook, Users, Settings, LogOut, HomeIcon } from "lucide-react"; // Added icons
 
 // Define navigation items for the dashboard sidebar
 const dashboardNavItems = [
   { href: "/dashboard", label: "Overview", icon: <LayoutDashboard className="h-5 w-5" /> },
+  { href: "/", label: "Homepage", icon: <HomeIcon className="h-5 w-5" /> },
   { href: "/dashboard/generate-ads", label: "Generate Ads", icon: <Megaphone className="h-5 w-5" /> },
   { href: "/dashboard/campaigns", label: "Facebook", icon: <Facebook className="h-5 w-5" /> }, // Assuming Facebook maps to Campaigns
   { href: "/dashboard/leads", label: "Leads", icon: <Users className="h-5 w-5" /> },
@@ -21,7 +22,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-sidebar border-r border-sidebar-border flex flex-col">
+    <aside className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-sidebar/80 backdrop-blur-md border-r border-sidebar-border flex flex-col">
       <div className="h-full px-3 py-4 overflow-y-auto">
         <Link href="/dashboard" className="flex items-center ps-2.5 mb-8">
           <span className="self-center text-2xl font-bold whitespace-nowrap text-primary">

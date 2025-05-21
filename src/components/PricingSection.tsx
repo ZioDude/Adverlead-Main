@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from 'lucide-react';
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const pricingTiers = [
   {
@@ -71,7 +72,14 @@ export default function PricingSection() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
           {pricingTiers.map((tier) => (
-            <Card key={tier.name} className={`relative flex flex-col shadow-lg hover:shadow-primary/30 transition-all duration-300 transform hover:-translate-y-1 ${tier.mostPopular ? 'border-2 border-primary shadow-primary/40' : 'border-border'}`}>
+            <Card 
+              key={tier.name} 
+              className={cn(
+                "flex flex-col shadow-lg hover:shadow-primary/30 transition-all duration-300 transform hover:-translate-y-1",
+                "bg-card/80 backdrop-blur-md",
+                tier.mostPopular ? 'border-2 border-primary shadow-primary/40' : 'border-border'
+              )}
+            >
               {tier.mostPopular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 text-sm font-semibold rounded-full whitespace-nowrap">
                   Most Popular
