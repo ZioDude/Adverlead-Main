@@ -1,8 +1,7 @@
+// This is the NEW src/app/layout.tsx (minimal root layout)
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import "./globals.css"; // Keep global styles here
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +13,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Metadata can stay here or move to group layouts if specific titles are needed per group
 export const metadata: Metadata = {
-  title: "Adverlead - Optimize Your Meta Lead Generation",
+  title: "Adverlead", // More general title for the whole app
   description: "Manage and optimize Meta (Facebook/Instagram) lead generation campaigns with Adverlead.",
 };
 
@@ -27,13 +27,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        <main className="flex-grow container mx-auto px-4 py-8">
-          {children}
-        </main>
-        <Footer />
+        {children} {/* Children will be either (marketing) layout or dashboard layout */}
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from "@/lib/utils";
-// import { useMemo } from "react"; // useMemo no longer needed
+import { useState, useEffect } from "react";
 
 interface AnimatedGridPatternProps {
   width?: number;
@@ -15,24 +15,26 @@ interface AnimatedGridPatternProps {
 export function AnimatedGridPattern({
   width = 40,
   height = 40,
-  maxOpacity = 0.5, // Adjusted for better visibility on dark theme
+  maxOpacity = 0.5,
   duration = 3,
-  numSquares = 8,  // Reduced for a less busy look
+  numSquares = 8,
   className,
 }: AnimatedGridPatternProps) {
-  // const columns = useMemo(() => { // Removed
-  //   return Array(width).fill(0);
-  // }, [width]);
-  // const rows = useMemo(() => { // Removed
-  //   return Array(height).fill(0);
-  // }, [height]);
+  const [clientDelay, setClientDelay] = useState(0);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    // Generate a single random delay for the pattern on the client
+    setClientDelay(Math.floor(Math.random() * numSquares * numSquares));
+  }, [numSquares]); // Re-calc if numSquares changes
 
   return (
     <div
       className={cn(
         "relative flex h-full w-full items-center justify-center overflow-hidden",
-        "[mask-image:radial-gradient(ellipse_at_center,white,transparent_80%)]", // Softer fade at edges
-        "animate-grid-fade-in", // Custom animation for fade-in
+        "[mask-image:radial-gradient(ellipse_at_center,white,transparent_80%)]",
+        "animate-grid-fade-in",
         className,
       )}
       style={{
@@ -42,7 +44,7 @@ export function AnimatedGridPattern({
     >
       <div
         className={cn(
-          "pointer-events-none absolute left-1/2 top-1/2 h-[200%] w-[200%]", // Make it larger to ensure coverage during animation
+          "pointer-events-none absolute left-1/2 top-1/2 h-[200%] w-[200%]",
           "-translate-x-1/2 -translate-y-1/2",
         )}
       >
@@ -67,8 +69,9 @@ export function AnimatedGridPattern({
             <rect
               width={width / numSquares}
               height={height / numSquares}
-              className="fill-[--grid-color,theme(colors.primary/0.2)] opacity-0 transition-opacity duration-[var(--duration,3s)] ease-in-out [animation-delay:calc(var(--delay)*100ms)] [animation-duration:calc(var(--duration,3s)*1000ms)] [animation-name:fade-in]"
-              style={{ "--delay": Math.floor(Math.random() * numSquares * numSquares) } as React.CSSProperties} // Random delay
+              className="fill-[--grid-color,theme(colors.primary/0.2)] opacity-0 transition-opacity duration-[var(--duration,3s)] ease-in-out [animation-delay:calc(var(--delay,0)*100ms)] [animation-duration:calc(var(--duration,3s)*1000ms)] [animation-name:fade-in]"
+              // Only set the --delay CSS variable on the client after mount
+              style={isClient ? { "--delay": clientDelay } as React.CSSProperties : { "--delay": 0 } as React.CSSProperties}
             />
           </pattern>
           <rect width="100%" height="100%" fill="url(#grid-pattern)" />

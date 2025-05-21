@@ -11,7 +11,7 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet";
-import { Menu } from 'lucide-react';
+import { Menu, LayoutDashboard } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Navbar() {
@@ -21,11 +21,8 @@ export default function Navbar() {
   const navItems = [
     { href: '/', label: 'Home' },
     { href: '/how-it-works', label: 'How it Works' },
-    { href: '/ad-generation', label: 'Ad Generation' },
-    { href: '/campaign-management', label: 'Campaigns' },
-    { href: '/lead-qualification', label: 'Leads' },
-    { href: '/about-us', label: 'About Us' },
     { href: '/pricing', label: 'Pricing' },
+    { href: '/about-us', label: 'About Us' },
     { href: '/faq', label: 'FAQ' },
     { href: '/contact', label: 'Contact' },
   ];
@@ -41,7 +38,7 @@ export default function Navbar() {
           Adverlead
         </Link>
 
-        <div className="hidden md:flex space-x-4 items-center">
+        <div className="hidden md:flex space-x-2 items-center">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -55,7 +52,16 @@ export default function Navbar() {
               {item.label}
             </Link>
           ))}
-          <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary/10 hover:text-primary">
+          <Button variant="ghost" asChild className={`hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium ${
+                pathname === '/dashboard'
+                  ? 'bg-primary/10 text-primary font-semibold'
+                  : 'text-muted-foreground hover:text-primary'
+              }`}>
+            <Link href="/dashboard">
+              <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
+            </Link>
+          </Button>
+          <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary/10 hover:text-primary ml-2">
             <Link href="/login">Login</Link>
           </Button>
           <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
@@ -91,6 +97,19 @@ export default function Navbar() {
                     </Link>
                   </SheetClose>
                 ))}
+                <SheetClose asChild>
+                    <Link
+                      href="/dashboard"
+                      onClick={handleLinkClick}
+                      className={`flex items-center px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                        pathname === '/dashboard'
+                          ? 'bg-primary/10 text-primary'
+                          : 'text-muted-foreground hover:bg-accent/10 hover:text-primary'
+                      }`}
+                    >
+                      <LayoutDashboard className="mr-2 h-5 w-5" /> Dashboard
+                    </Link>
+                </SheetClose>
                 <hr className="my-4 border-border" />
                 <SheetClose asChild>
                     <Button variant="outline" asChild className="w-full border-primary text-primary hover:bg-primary/10 hover:text-primary">
