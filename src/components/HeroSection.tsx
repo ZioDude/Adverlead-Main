@@ -27,7 +27,7 @@ export default function HeroSection() {
               ✨ Introducing Adverlead
             </AnimatedShinyText>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight text-foreground">
-              <span className="text-primary">Optimize</span> Your Meta Lead Generation with Adverlead
+              <span className="text-primary">Optimize</span> Your Meta Lead Gen with Adverlead
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto md:mx-0">
               Adverlead is your all-in-one platform to create, manage, analyze, and convert leads from your Facebook and Instagram campaigns. Stop juggling tools and start maximizing your ROI.
