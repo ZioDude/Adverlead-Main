@@ -45,85 +45,84 @@
 
 :root {
   --radius: 0.625rem;
-  /* Theme: Black */
-  --background: oklch(0.05 0 0); /* Very dark grey / near black */
-  --foreground: oklch(0.95 0 0); /* Light grey / near white for text */
+  /* Theme: High Contrast Dark Purple */
+  --background: oklch(0.03 0 0); /* Deep dark, near black */
+  --foreground: oklch(0.96 0 0); /* Brighter off-white for text */
 
-  --card: oklch(0.1 0 0); /* Slightly lighter black for cards */
-  --card-foreground: oklch(0.95 0 0);
+  --card: oklch(0.07 0 0); /* Dark card, slightly lighter than bg */
+  --card-foreground: oklch(0.96 0 0);
 
-  --popover: oklch(0.1 0 0);
-  --popover-foreground: oklch(0.95 0 0);
+  --popover: oklch(0.07 0 0);
+  --popover-foreground: oklch(0.96 0 0);
 
-  /* Theme: Purple accents */
-  --primary: oklch(0.6 0.15 290); /* Purple */
-  --primary-foreground: oklch(0.98 0 0); /* White/very light for text on primary */
+  /* Theme: Vibrant Purple accents */
+  --primary: oklch(0.65 0.22 285); /* Vibrant Purple */
+  --primary-foreground: oklch(0.99 0 0); /* Almost pure white for max contrast */
 
-  --secondary: oklch(0.5 0.12 280); /* Darker Purple */
-  --secondary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.55 0.18 280); /* Slightly less vibrant, darker Purple */
+  --secondary-foreground: oklch(0.99 0 0);
 
-  --muted: oklch(0.15 0 0); /* Dark grey for muted elements */
-  --muted-foreground: oklch(0.6 0 0); /* Lighter grey for muted text */
+  --muted: oklch(0.12 0 0); /* Darker grey for muted elements */
+  --muted-foreground: oklch(0.65 0 0); /* Lighter grey for muted text, adjusted for contrast */
 
-  --accent: oklch(0.65 0.16 295); /* Brighter Purple for accents */
-  --accent-foreground: oklch(0.98 0 0);
+  --accent: oklch(0.7 0.24 290); /* Bright, vibrant Purple for accents */
+  --accent-foreground: oklch(0.03 0 0); /* Dark text on bright accent for contrast */
 
-  --destructive: oklch(0.5 0.2 15); /* A contrasting red for destructive actions */
-  --border: oklch(0.2 0 0); /* Dark border */
-  --input: oklch(0.2 0 0); /* Dark input background */
-  --ring: oklch(0.6 0.15 290); /* Purple for focus rings */
+  --destructive: oklch(0.55 0.22 15); /* A strong, contrasting red */
+  --border: oklch(0.15 0 0); /* Darker border */
+  --input: oklch(0.15 0 0); /* Darker input background */
+  --ring: oklch(0.7 0.24 290); /* Accent Purple for focus rings */
 
-  --chart-1: oklch(0.6 0.15 290);   /* Purple */
-  --chart-2: oklch(0.5 0.12 280);   /* Darker Purple */
-  --chart-3: oklch(0.7 0.18 300);   /* Lighter Purple */
-  --chart-4: oklch(0.4 0.1 270);   /* Very Dark Purple */
-  --chart-5: oklch(0.8 0.2 310);   /* Brightest Purple */
-
-  --sidebar: oklch(0.08 0 0); /* Dark sidebar background */
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.6 0.15 290); /* Purple for primary sidebar elements */
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.65 0.16 295); /* Brighter Purple for sidebar accents */
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.2 0 0);
-  --sidebar-ring: oklch(0.6 0.15 290);
+  /* Chart colors with more vibrancy */
+  --chart-1: oklch(0.65 0.22 285);  /* Primary Purple */
+  --chart-2: oklch(0.7 0.24 290);   /* Accent Purple */
+  --chart-3: oklch(0.55 0.18 280);  /* Secondary Purple */
+  --chart-4: oklch(0.75 0.26 295);  /* Lighter, more vibrant purple */
+  --chart-5: oklch(0.5 0.16 275);   /* Deeper, slightly bluer purple */
+  
+  --sidebar: oklch(0.05 0 0); /* Slightly off-black for sidebar */
+  --sidebar-foreground: oklch(0.96 0 0);
+  --sidebar-primary: oklch(0.65 0.22 285); 
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.7 0.24 290);
+  --sidebar-accent-foreground: oklch(0.03 0 0);
+  --sidebar-border: oklch(0.15 0 0);
+  --sidebar-ring: oklch(0.7 0.24 290);
 }
 
-/* Remove the .dark class overrides if we want black/purple to be the default theme */
-/* Or, ensure the 'dark' class is applied to the html or body tag */
 /* Forcing dark theme as default for now */
 html, body {
-  --background: oklch(0.05 0 0);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.1 0 0);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.1 0 0);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.6 0.15 290);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.5 0.12 280);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.15 0 0);
-  --muted-foreground: oklch(0.6 0 0);
-  --accent: oklch(0.65 0.16 295);
-  --accent-foreground: oklch(0.98 0 0);
-  --destructive: oklch(0.5 0.2 15);
-  --border: oklch(0.2 0 0);
-  --input: oklch(0.2 0 0);
-  --ring: oklch(0.6 0.15 290);
-  --chart-1: oklch(0.6 0.15 290);
-  --chart-2: oklch(0.5 0.12 280);
-  --chart-3: oklch(0.7 0.18 300);
-  --chart-4: oklch(0.4 0.1 270);
-  --chart-5: oklch(0.8 0.2 310);
-  --sidebar: oklch(0.08 0 0);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.6 0.15 290);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.65 0.16 295);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.2 0 0);
-  --sidebar-ring: oklch(0.6 0.15 290);
+  --background: oklch(0.03 0 0);
+  --foreground: oklch(0.96 0 0);
+  --card: oklch(0.07 0 0);
+  --card-foreground: oklch(0.96 0 0);
+  --popover: oklch(0.07 0 0);
+  --popover-foreground: oklch(0.96 0 0);
+  --primary: oklch(0.65 0.22 285);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.55 0.18 280);
+  --secondary-foreground: oklch(0.99 0 0);
+  --muted: oklch(0.12 0 0);
+  --muted-foreground: oklch(0.65 0 0);
+  --accent: oklch(0.7 0.24 290);
+  --accent-foreground: oklch(0.03 0 0);
+  --destructive: oklch(0.55 0.22 15);
+  --border: oklch(0.15 0 0);
+  --input: oklch(0.15 0 0);
+  --ring: oklch(0.7 0.24 290);
+  --chart-1: oklch(0.65 0.22 285);
+  --chart-2: oklch(0.7 0.24 290);
+  --chart-3: oklch(0.55 0.18 280);
+  --chart-4: oklch(0.75 0.26 295);
+  --chart-5: oklch(0.5 0.16 275);
+  --sidebar: oklch(0.05 0 0);
+  --sidebar-foreground: oklch(0.96 0 0);
+  --sidebar-primary: oklch(0.65 0.22 285);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.7 0.24 290);
+  --sidebar-accent-foreground: oklch(0.03 0 0);
+  --sidebar-border: oklch(0.15 0 0);
+  --sidebar-ring: oklch(0.7 0.24 290);
 }
 
 /* .dark {
@@ -168,3 +167,5 @@ html, body {
     @apply bg-background text-foreground;
   }
 }
+
+/* REMOVED Magic UI animation keyframes and utilities from here */
