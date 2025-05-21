@@ -51,7 +51,7 @@ export default function ExpandedImageView({ src, onClose }: ExpandedImageViewPro
     }
   };
 
-  const handleCloseClick = (e: React.MouseEvent) => {
+  const handleCloseClick = (_e: React.MouseEvent) => {
     // e.stopPropagation() is no longer strictly needed here for the original problem.
     // The pointerdown capture listener already stops propagation to the document.
     onClose();

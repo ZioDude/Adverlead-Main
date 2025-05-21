@@ -71,7 +71,7 @@ const houseStyles = [
   { id: "mediterranean", label: "Mediterranean House" },
 ];
 
-const imageViews = ["Front View", "Kitchen", "Living Room", "Bathroom", "Bedroom"];
+// const imageViews = ["Front View", "Kitchen", "Living Room", "Bathroom", "Bedroom"];
 
 interface GeneratedImage {
   view: string;

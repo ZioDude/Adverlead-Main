@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, PlusCircle, Zap, Image as ImageIcon, Edit3, Trash2, X } from "lucide-react";
+import { ArrowRight, PlusCircle, Zap, Edit3, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,

@@ -18,7 +18,7 @@ export default function SignUpPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const router = useRouter();
+  const _router = useRouter();
   const supabase = createClientComponentClient();
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -34,7 +34,7 @@ export default function SignUpPage() {
     }
 
     try {
-      const { error, data } = await supabase.auth.signUp({
+      const { error, data: _data } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -53,7 +53,7 @@ export default function SignUpPage() {
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-    } catch (err) {
+    } catch (_err) {
       setError('An unexpected error occurred');
     } finally {
       setIsLoading(false);

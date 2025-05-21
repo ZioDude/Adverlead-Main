@@ -21,7 +21,7 @@ export default function LoginPage() {
 
   // Handle error from URL params (e.g., from auth callback)
   useEffect(() => {
-    const errorFromParams = searchParams.get('error');
+    const errorFromParams = searchParams?.get('error');
     if (errorFromParams) {
       setError(decodeURIComponent(errorFromParams));
     }
@@ -45,7 +45,7 @@ export default function LoginPage() {
 
       router.push('/dashboard');
       router.refresh();
-    } catch (err) {
+    } catch (_err) {
       setError('An unexpected error occurred');
     } finally {
       setIsLoading(false);

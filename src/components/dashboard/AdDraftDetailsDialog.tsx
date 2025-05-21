@@ -25,9 +25,9 @@ interface AdDraftDetailsDialogProps {
 
 export default function AdDraftDetailsDialog({ 
   draft, 
-  isOpen, 
+  isOpen,
   onClose,
-  expandedImage,
+  expandedImage: _expandedImage,
   onExpandImage
 }: AdDraftDetailsDialogProps) {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});

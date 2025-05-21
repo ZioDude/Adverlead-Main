@@ -66,7 +66,7 @@ export async function POST(request: Request) {
 }
 
 // GET handler to fetch existing ad drafts
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
   try {
     const supabase = createRouteHandlerClient({ cookies });
     

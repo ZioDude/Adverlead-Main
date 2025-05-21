@@ -22,7 +22,7 @@ const secondaryNavItems = [
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  const _supabase = createClientComponentClient();
 
   const handleLogout = async () => {
     try {
