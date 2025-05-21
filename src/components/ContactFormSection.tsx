@@ -58,7 +58,7 @@ export default function ContactFormSection() {
           <div className="md:pr-8">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Get in Touch</h2>
             <p className="text-lg text-muted-foreground mb-6">
-              Have questions about Adverlead? Need help with our platform, or interested in a custom solution? Fill out the form, and we'll get back to you as soon as possible.
+              Have questions about Adverlead? Need help with our platform, or interested in a custom solution? Fill out the form, and we&apos;ll get back to you as soon as possible.
             </p>
             <div className="space-y-4">
               <p className="text-muted-foreground">
@@ -79,7 +79,7 @@ export default function ContactFormSection() {
             <CardContent>
               {isSubmitted && (
                 <div className="mb-4 p-3 rounded-md bg-green-100 text-green-700 border border-green-200">
-                  Thank you for your message! We'll be in touch soon.
+                  Thank you for your message! We&apos;ll be in touch soon.
                 </div>
               )}
               {submitError && (

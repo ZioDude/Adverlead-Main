@@ -27,7 +27,7 @@ export default function PricingPage() {
           </details>
         </div>
         <div className="mt-12">
-            <p className="text-lg text-muted-foreground mb-4">Still have questions? We're here to help!</p>
+            <p className="text-lg text-muted-foreground mb-4">Still have questions? We&apos;re here to help!</p>
             <Button asChild size="lg">
                 <Link href="/contact">Contact Sales</Link>
             </Button>

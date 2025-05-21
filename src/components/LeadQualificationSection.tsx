@@ -35,7 +35,7 @@ export default function LeadQualificationSection() {
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-bold">Qualify and Convert Leads Faster</h2>
           <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
-            Adverlead's CRM features help you effectively track, manage, and engage with every lead generated from your campaigns.
+            Adverlead&apos;s CRM features help you effectively track, manage, and engage with every lead generated from your campaigns.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

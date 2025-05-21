@@ -66,7 +66,7 @@ export default function PricingSection() {
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-bold">Simple, Transparent Pricing</h2>
           <p className="text-lg text-muted-foreground mt-2 max-w-xl mx-auto">
-            Choose the plan that's right for your business. No hidden fees, cancel anytime.
+            Choose the plan that&apos;s right for your business. No hidden fees, cancel anytime.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">

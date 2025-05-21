@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { SlidersHorizontal, Target, BarChart3, PlayCircle, Edit3, Copy, Trash2 } from 'lucide-react';
+import { SlidersHorizontal, Target, BarChart3, Edit3 } from 'lucide-react';
 import Link from "next/link";
 
 const features = [
