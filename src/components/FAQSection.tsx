@@ -16,7 +16,7 @@ const faqItems = [
   {
     id: "faq-2",
     question: "How does Adverlead integrate with Meta?",
-    answer: "Adverlead securely connects to your Meta Ads account via the Meta Ads API. This allows us to fetch campaign data, manage campaigns on your behalf (with your permission), and retrieve lead information in real-time."
+    answer: "Adverlead connects to your Meta Ads account via the Meta Ads API. This allows us to fetch campaign data, manage campaigns on your behalf (with your permission), and retrieve lead information in real-time."
   },
   {
     id: "faq-3",
