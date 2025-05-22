@@ -46,7 +46,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-sidebar/80 backdrop-blur-md border-r border-sidebar-border flex flex-col">
+    <aside className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-black flex flex-col shadow-xl shadow-purple-900/50">
       <div className="h-full px-3 py-4 overflow-y-auto">
         <Link href="/dashboard" className="flex items-center ps-2.5 mb-8">
           <span className="self-center text-2xl font-bold whitespace-nowrap text-primary">
@@ -59,8 +59,8 @@ export default function Sidebar() {
               key={item.label}
               href={item.href}
               className={cn(
-                "flex items-center p-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group",
-                pathname === item.href ? "bg-sidebar-primary text-sidebar-primary-foreground" : ""
+                "flex items-center py-2 px-3 rounded-lg hover:bg-neutral-700 hover:text-white group text-sm font-medium",
+                pathname === item.href ? "bg-neutral-900 text-purple-400 font-semibold border-l-4 border-purple-500" : "text-neutral-400"
               )}
             >
               {item.icon}
@@ -75,8 +75,8 @@ export default function Sidebar() {
                     key={item.label}
                     href={item.href}
                     className={cn(
-                        "flex items-center p-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group",
-                        pathname === item.href ? "bg-sidebar-primary text-sidebar-primary-foreground" : ""
+                        "flex items-center py-2 px-3 rounded-lg hover:bg-neutral-700 hover:text-white group text-sm font-medium",
+                        pathname === item.href ? "bg-neutral-900 text-purple-400 font-semibold border-l-4 border-purple-500" : "text-neutral-400"
                     )}
                     >
                     {item.icon}
@@ -85,7 +85,7 @@ export default function Sidebar() {
             ))}
             <button
                 onClick={handleLogout}
-                className="flex items-center p-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group w-full"
+                className="flex items-center py-2 px-3 rounded-lg text-neutral-400 hover:bg-neutral-700 hover:text-white group w-full text-sm font-medium"
             >
                 <LogOut className="h-5 w-5" />
                 <span className="ms-3">Logout</span>

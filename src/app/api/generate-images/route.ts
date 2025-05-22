@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import Replicate from 'replicate';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 
 // Debug: Log the API token status
 console.log("[API Route] REPLICATE_API_TOKEN:", process.env.REPLICATE_API_TOKEN ? "Token Present (first few chars: " + process.env.REPLICATE_API_TOKEN.substring(0,5) + ")" : "Token NOT SET or empty");
@@ -24,6 +26,44 @@ function generatePlaceholderImage(prompt: string, view: string): string {
   return `https://picsum.photos/seed/${seed}${view.replace(/\s+/g, '')}/1024/1024`;
 }
 
+async function uploadToSupabase(imageUrl: string, fileName: string, userId: string, supabase: any) {
+  try {
+    console.log(`[API Route] Attempting to upload image to Supabase Storage for user ${userId}`);
+    
+    // Fetch the image from Replicate
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      throw new Error('Failed to fetch image from Replicate');
+    }
+    const imageBlob = await response.blob();
+
+    // Upload to Supabase Storage
+    const { data, error } = await supabase.storage
+      .from('ad-images')
+      .upload(`${userId}/${fileName}`, imageBlob, {
+        contentType: 'image/jpeg',
+        upsert: true
+      });
+
+    if (error) {
+      console.error('Error uploading to Supabase Storage:', error);
+      return null;
+    }
+
+    console.log('[API Route] Successfully uploaded image to Supabase Storage');
+
+    // Get the public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('ad-images')
+      .getPublicUrl(`${userId}/${fileName}`);
+
+    return publicUrl;
+  } catch (error) {
+    console.error('Error in uploadToSupabase:', error);
+    return null;
+  }
+}
+
 // Cache to store recently generated images
 type ImageCache = {
   [key: string]: {
@@ -35,7 +75,7 @@ type ImageCache = {
 const imageCache: ImageCache = {};
 const CACHE_EXPIRY = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-async function generateImageWithReplicate(prompt: string): Promise<string | null> {
+async function generateImageWithReplicate(prompt: string, view: string, userId: string, supabase: any): Promise<string | null> {
   console.log(`[API Route] Calling Replicate for prompt: ${prompt}`);
   try {
     // For faster testing/debugging - uncomment this to use placeholder images 
@@ -81,15 +121,29 @@ async function generateImageWithReplicate(prompt: string): Promise<string | null
       console.log("[API Route] Prediction succeeded:", output);
       
       if (Array.isArray(output) && output.length > 0 && typeof output[0] === 'string') {
-        console.log(`[API Route] Image generated: ${output[0]}`);
+        const replicateUrl = output[0];
+        console.log(`[API Route] Image generated: ${replicateUrl}`);
         
-        // Cache the result
-        imageCache[cacheKey] = {
-          timestamp: Date.now(),
-          urls: output as string[]
-        };
+        // Generate a unique filename
+        const timestamp = Date.now();
+        const fileName = `${view.toLowerCase().replace(/\s+/g, '-')}-${timestamp}.jpg`;
         
-        return output[0];
+        // Upload to Supabase Storage
+        const supabaseUrl = await uploadToSupabase(replicateUrl, fileName, userId, supabase);
+        
+        if (supabaseUrl) {
+          // Cache the Supabase URL
+          imageCache[cacheKey] = {
+            timestamp: Date.now(),
+            urls: [supabaseUrl]
+          };
+          
+          return supabaseUrl;
+        }
+        
+        // Fallback to Replicate URL if Supabase upload fails
+        console.warn('[API Route] Failed to upload to Supabase, falling back to Replicate URL');
+        return replicateUrl;
       } else {
         console.error('[API Route] Replicate output format unexpected:', output);
       }
@@ -106,6 +160,16 @@ async function generateImageWithReplicate(prompt: string): Promise<string | null
 
 export async function POST(request: Request) {
   try {
+    // Initialize Supabase client with awaited cookies
+    const cookieStore = cookies();
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    
+    // Get the current user's session
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await request.json() as RequestBody;
     const { houseStyleLabel } = body;
 
@@ -140,7 +204,7 @@ export async function POST(request: Request) {
     for (const view of imageViews) {
       // Construct a more detailed prompt
       const prompt = `photo of a ${houseStyleLabel} ${view}, high quality, detailed, interior design, realistic lighting`;
-      const imageUrl = await generateImageWithReplicate(prompt);
+      const imageUrl = await generateImageWithReplicate(prompt, view, session.user.id, supabase);
       if (imageUrl) {
         generatedImages.push({
           view,

@@ -1,7 +1,17 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, PlusCircle, Zap, Edit3, Trash2 } from "lucide-react";
+import { 
+  ArrowRight, 
+  PlusCircle, 
+  Zap,
+  Grid,
+  Home,
+  Facebook,
+  Users,
+  Settings,
+  LogOut
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -9,30 +19,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import AdvancedAdBuilderDialogContent from "@/components/dashboard/AdvancedAdBuilderDialogContent";
 import AdDraftDetailsDialog from "@/components/dashboard/AdDraftDetailsDialog";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useToast } from "@/components/ui/use-toast";
 import ExpandedImageView from "@/components/dashboard/ExpandedImageView";
+import { cn } from "@/lib/utils";
 
 // Define the structure of an Ad Draft, matching the backend
 interface AdDraft {
-  id: string; // Assuming Supabase provides an ID
+  id: string;
   industry: string | null;
   house_style: string | null;
   generated_images: { view: string; src: string; alt: string }[];
-  created_at: string; // Assuming Supabase provides this
+  created_at: string;
 }
 
 export default function GenerateAdsPage() {
@@ -42,9 +43,19 @@ export default function GenerateAdsPage() {
   const [draftsError, setDraftsError] = useState<string | null>(null);
   const [selectedDraft, setSelectedDraft] = useState<AdDraft | null>(null);
   const [isDraftDetailsOpen, setIsDraftDetailsOpen] = useState(false);
-  const [draftToDelete, setDraftToDelete] = useState<string | null>(null);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const { toast } = useToast();
+
+  // Updated navigation items with correct paths
+  const navigationItems = [
+    { icon: Grid, label: "Overview", href: "/" },
+    { icon: Home, label: "Homepage", href: "/" },
+    { icon: Zap, label: "Generate Ads", href: "/generate-ads", active: true },
+    { icon: Facebook, label: "Facebook", href: "/facebook" },
+    { icon: Users, label: "Leads", href: "/leads" },
+    { icon: Settings, label: "Settings", href: "/settings" },
+    { icon: LogOut, label: "Logout", href: "/logout" },
+  ];
 
   const fetchDrafts = async () => {
     setIsLoadingDrafts(true);
@@ -70,166 +81,159 @@ export default function GenerateAdsPage() {
     fetchDrafts();
   }, [isAdvancedBuilderOpen]);
 
-  const handleDeleteDraft = async (draftId: string) => {
-    try {
-      const response = await fetch(`/api/ad-drafts/${draftId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to delete draft');
-      }
-
-      // Remove the draft from the local state
-      setRecentDrafts(drafts => drafts.filter(draft => draft.id !== draftId));
-      toast({
-        title: "Draft deleted",
-        description: "The draft has been successfully deleted.",
-      });
-    } catch (error) {
-      console.error('Error deleting draft:', error);
-      toast({
-        title: "Error",
-        description: "Failed to delete the draft. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setDraftToDelete(null);
-    }
-  };
-
   const handleViewDetails = (draft: AdDraft) => {
     setSelectedDraft(draft);
     setIsDraftDetailsOpen(true);
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-          Generate New Ads
-        </h1>
-        <Dialog open={isAdvancedBuilderOpen} onOpenChange={setIsAdvancedBuilderOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              <PlusCircle className="mr-2 h-5 w-5" /> New Ad Campaign
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-2xl md:max-w-3xl lg:max-w-4xl p-0">
-            <DialogHeader className="p-6 pb-4">
-              <DialogTitle className="text-2xl font-bold text-center">Advanced Ad Builder</DialogTitle>
-            </DialogHeader>
-            <AdvancedAdBuilderDialogContent onClose={() => setIsAdvancedBuilderOpen(false)} />
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <div className="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Quick Ad Generation</h2>
-            <Zap className="h-6 w-6 text-primary" />
-          </div>
-          <p className="mb-4 text-sm text-muted-foreground">
-            Generate a new ad quickly using our AI-powered templates.
-          </p>
-          <Button variant="outline" className="w-full">
-            Start Quick Generation <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-
-        <div className="rounded-lg border bg-card p-6 text-card-foreground shadow-sm hover:shadow-primary/20 transition-shadow cursor-pointer" onClick={() => setIsAdvancedBuilderOpen(true)}>
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Advanced Ad Builder</h2>
-            <PlusCircle className="h-6 w-6 text-blue-500" />
-          </div>
-          <p className="mb-4 text-sm text-muted-foreground">
-            Use the advanced builder for full control over your ad creatives and targeting.
-          </p>
-          <Button variant="outline" className="w-full pointer-events-none">
-            Open Advanced Builder <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-
-        <div className="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">View Ad Templates</h2>
-          </div>
-          <p className="mb-4 text-sm text-muted-foreground">
-            Browse and manage your saved ad templates and creatives.
-          </p>
-          <Button variant="outline" className="w-full">
-            Browse Templates <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-
-      <div className="mt-8">
-        <h2 className="mb-4 text-2xl font-semibold">Recent Ad Drafts</h2>
-        {isLoadingDrafts && <p className="text-sm text-muted-foreground">Loading drafts...</p>}
-        {draftsError && <p className="text-sm text-destructive">Error loading drafts: {draftsError}</p>}
-        {!isLoadingDrafts && !draftsError && recentDrafts.length === 0 && (
-          <p className="text-sm text-muted-foreground">
-            You have no recent ad drafts. Start generating to see them here.
-          </p>
-        )}
-        {!isLoadingDrafts && !draftsError && recentDrafts.length > 0 && (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {recentDrafts.map((draft) => (
-              <div key={draft.id} className="rounded-lg border bg-card p-6 text-card-foreground shadow-sm relative group">
-                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-2">
-                  <Button variant="outline" size="icon" className="h-8 w-8">
-                    <Edit3 className="h-4 w-4" />
-                    <span className="sr-only">Edit Draft</span>
-                  </Button>
-                  <Button 
-                    variant="destructive" 
-                    size="icon" 
-                    className="h-8 w-8"
-                    onClick={() => setDraftToDelete(draft.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    <span className="sr-only">Delete Draft</span>
-                  </Button>
-                </div>
-                {draft.generated_images && draft.generated_images.length > 0 && (
-                  <div 
-                    className="mb-4 h-40 w-full relative rounded-md overflow-hidden bg-muted cursor-pointer"
-                    onClick={() => handleViewDetails(draft)}
-                  >
-                    <Image
-                      src={draft.generated_images[0].src}
-                      alt={draft.generated_images[0].alt || 'Ad draft preview'}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                  </div>
-                )}
-                <h3 className="text-lg font-semibold mb-1 truncate">
-                  {draft.industry} {draft.house_style ? `- ${draft.house_style}` : ''}
-                </h3>
-                <p className="text-xs text-muted-foreground mb-2">
-                  Created: {new Date(draft.created_at).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-muted-foreground mb-3 truncate">
-                  {draft.generated_images?.length || 0} image{draft.generated_images?.length !== 1 ? 's' : ''} generated.
-                </p>
+    <div className="min-h-screen bg-black/95">
+      <div className="max-w-[1400px] mx-auto px-6 py-8">
+        {/* Header Section */}
+        <div className="flex flex-col gap-6 mb-12">
+          <div className="flex items-center justify-between">
+            <h1 className="text-4xl font-bold tracking-tight text-[#bf5af2]">
+              Generate New Ads
+            </h1>
+            <Dialog open={isAdvancedBuilderOpen} onOpenChange={setIsAdvancedBuilderOpen}>
+              <DialogTrigger asChild>
                 <Button 
-                  variant="outline" 
-                  className="w-full text-sm"
+                  size="lg" 
+                  className="bg-transparent hover:bg-[#bf5af2]/10 text-[#bf5af2] rounded-full px-6 border border-[#bf5af2] transition-colors"
+                >
+                  <PlusCircle className="mr-2 h-5 w-5" /> New Ad Campaign
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-2xl md:max-w-3xl lg:max-w-4xl p-0">
+                <DialogHeader className="p-6 pb-4">
+                  <DialogTitle className="text-2xl font-bold text-center">Advanced Ad Builder</DialogTitle>
+                </DialogHeader>
+                <AdvancedAdBuilderDialogContent onClose={() => setIsAdvancedBuilderOpen(false)} />
+              </DialogContent>
+            </Dialog>
+          </div>
+          <p className="text-lg text-zinc-400 max-w-3xl">
+            Create stunning ad creatives using our AI-powered tools. Choose from quick generation or advanced builder for more control.
+          </p>
+        </div>
+
+        {/* Action Cards Grid */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-16">
+          {/* Quick Ad Generation */}
+          <div className="group relative rounded-xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/5 p-6 hover:border-[#bf5af2]/20 transition-colors">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-white">Quick Ad Generation</h2>
+              <Zap className="h-6 w-6 text-[#bf5af2]" />
+            </div>
+            <p className="mb-6 text-sm text-zinc-400">
+              Generate a new ad quickly using our AI-powered templates. Perfect for rapid testing and iteration.
+            </p>
+            <Button 
+              variant="outline" 
+              className="w-full bg-transparent border-white/10 hover:bg-[#bf5af2] hover:text-white transition-colors rounded-lg"
+            >
+              Start Quick Generation <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Advanced Ad Builder */}
+          <div 
+            onClick={() => setIsAdvancedBuilderOpen(true)}
+            className="group relative rounded-xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/5 p-6 hover:border-[#bf5af2]/20 transition-colors cursor-pointer"
+          >
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-white">Advanced Ad Builder</h2>
+              <div className="h-8 w-8 rounded-full bg-[#bf5af2]/10 flex items-center justify-center">
+                <PlusCircle className="h-5 w-5 text-[#bf5af2] group-hover:rotate-90 transition-transform duration-300" />
+              </div>
+            </div>
+            <p className="mb-6 text-sm text-zinc-400">
+              Use the advanced builder for full control over your ad creatives and targeting options.
+            </p>
+            <Button 
+              variant="outline" 
+              className="w-full bg-transparent border-white/10 hover:bg-[#bf5af2] hover:text-white transition-colors rounded-lg pointer-events-none"
+            >
+              Open Advanced Builder <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* View Ad Templates */}
+          <div className="group relative rounded-xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/5 p-6 hover:border-[#bf5af2]/20 transition-colors">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-white">View Ad Templates</h2>
+              <ArrowRight className="h-6 w-6 text-[#bf5af2]" />
+            </div>
+            <p className="mb-6 text-sm text-zinc-400">
+              Browse and manage your saved ad templates and creatives. Reuse successful designs.
+            </p>
+            <Button 
+              variant="outline" 
+              className="w-full bg-transparent border-white/10 hover:bg-[#bf5af2] hover:text-white transition-colors rounded-lg"
+            >
+              Browse Templates <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Recent Ad Drafts */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-semibold text-white mb-8">Recent Ad Drafts</h2>
+          
+          {isLoadingDrafts && (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#bf5af2] border-t-transparent"></div>
+              <p className="mt-4 text-sm text-zinc-400">Loading drafts...</p>
+            </div>
+          )}
+
+          {draftsError && (
+            <div className="text-center py-12">
+              <p className="text-sm text-red-500">Error loading drafts: {draftsError}</p>
+            </div>
+          )}
+
+          {!isLoadingDrafts && !draftsError && recentDrafts.length === 0 && (
+            <div className="text-center py-12 rounded-xl bg-black/20 backdrop-blur-sm border border-white/5">
+              <p className="text-sm text-zinc-400">
+                You have no recent ad drafts. Start generating to see them here.
+              </p>
+            </div>
+          )}
+
+          {!isLoadingDrafts && !draftsError && recentDrafts.length > 0 && (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {recentDrafts.map((draft) => (
+                <div 
+                  key={draft.id} 
+                  className="rounded-xl bg-black/20 backdrop-blur-sm border border-white/5 p-6 hover:border-[#bf5af2]/20 transition-colors cursor-pointer"
                   onClick={() => handleViewDetails(draft)}
                 >
-                  View Details <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        )}
+                  {draft.generated_images && draft.generated_images.length > 0 && (
+                    <div className="mb-4 h-48 w-full relative rounded-lg overflow-hidden">
+                      <Image
+                        src={draft.generated_images[0].src}
+                        alt={draft.generated_images[0].alt || 'Ad draft preview'}
+                        fill
+                        className="object-cover transition-transform duration-500 hover:scale-110"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    </div>
+                  )}
+                  <h3 className="text-lg font-semibold text-white truncate mb-2">
+                    {draft.industry} {draft.house_style ? `- ${draft.house_style}` : ''}
+                  </h3>
+                  <p className="text-sm text-zinc-400">
+                    {new Date(draft.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Draft Details Dialog */}
+      {/* Dialogs */}
       <AdDraftDetailsDialog
         draft={selectedDraft}
         isOpen={isDraftDetailsOpen}
@@ -241,34 +245,12 @@ export default function GenerateAdsPage() {
         onExpandImage={setExpandedImage}
       />
 
-      {/* Expanded Image View */}
       {expandedImage && (
         <ExpandedImageView 
           src={expandedImage} 
           onClose={() => setExpandedImage(null)} 
         />
       )}
-
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog open={!!draftToDelete} onOpenChange={() => setDraftToDelete(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the ad draft and all its generated images.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              onClick={() => draftToDelete && handleDeleteDraft(draftToDelete)}
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname : '',
+        port: '',
+        pathname: '/**',
+      }
     ],
     minimumCacheTTL: 60, // Cache images for 60 seconds minimum
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
