@@ -1,16 +1,16 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { 
-  ArrowRight, 
-  PlusCircle, 
-  Zap,
-  Grid,
-  Home,
-  Facebook,
-  Users,
-  Settings,
-  LogOut
+import {
+  ArrowRight,
+  PlusCircle,
+  Zap
+  // Grid, // Removed unused import
+  // Home, // Removed unused import
+  // Facebook, // Removed unused import
+  // Users, // Removed unused import
+  // Settings, // Removed unused import
+  // LogOut // Removed unused import
 } from "lucide-react";
 import {
   Dialog,
@@ -23,7 +23,7 @@ import AdvancedAdBuilderDialogContent from "@/components/dashboard/AdvancedAdBui
 import AdDraftDetailsDialog from "@/components/dashboard/AdDraftDetailsDialog";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useToast } from "@/components/ui/use-toast";
+// import { useToast } from "@/components/ui/use-toast"; // Removed unused import
 import ExpandedImageView from "@/components/dashboard/ExpandedImageView";
 // import { cn } from "@/lib/utils"; // Removed unused import
 

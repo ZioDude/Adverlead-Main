@@ -38,7 +38,7 @@ async function uploadToSupabase(imageUrl: string, fileName: string, userId: stri
     const imageBlob = await response.blob();
 
     // Upload to Supabase Storage
-    const { data: _data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from('ad-images')
       .upload(`${userId}/${fileName}`, imageBlob, {
         contentType: 'image/jpeg',
