@@ -17,6 +17,7 @@ export default function ExpandedImageView({ src, onClose }: ExpandedImageViewPro
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        e.stopPropagation(); // Prevent event from reaching underlying dialogs
         onClose();
       }
     };
@@ -51,10 +52,9 @@ export default function ExpandedImageView({ src, onClose }: ExpandedImageViewPro
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleCloseClick = (_e: React.MouseEvent) => {
-    // e.stopPropagation() is no longer strictly needed here for the original problem.
-    // The pointerdown capture listener already stops propagation to the document.
+  const handleCloseClick = (e: React.MouseEvent) => {
+    // Explicitly stop propagation for the click event as well
+    e.stopPropagation();
     onClose();
   };
 
@@ -95,4 +95,4 @@ export default function ExpandedImageView({ src, onClose }: ExpandedImageViewPro
     </div>,
     document.body
   );
-} 
+}

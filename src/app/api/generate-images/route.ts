@@ -64,33 +64,13 @@ async function uploadToSupabase(imageUrl: string, fileName: string, userId: stri
   }
 }
 
-// Cache to store recently generated images
-type ImageCache = {
-  [key: string]: {
-    timestamp: number;
-    urls: string[];
-  }
-};
-
-const imageCache: ImageCache = {};
-const CACHE_EXPIRY = 30 * 60 * 1000; // 30 minutes in milliseconds
-
 async function generateImageWithReplicate(prompt: string, view: string, userId: string, supabase: SupabaseClient): Promise<string | null> {
   console.log(`[API Route] Calling Replicate for prompt: ${prompt}`);
   try {
-    // For faster testing/debugging - uncomment this to use placeholder images 
+    // For faster testing/debugging - uncomment this to use placeholder images
     // instead of calling the API
     // return generatePlaceholderImage(prompt, prompt.split(' ').pop() || 'image');
-    
-    // Check cache first
-    const cacheKey = prompt.toLowerCase();
-    const cachedResult = imageCache[cacheKey];
-    
-    if (cachedResult && (Date.now() - cachedResult.timestamp) < CACHE_EXPIRY) {
-      console.log(`[API Route] Using cached image for: ${prompt}`);
-      return cachedResult.urls[0] || null;
-    }
-    
+
     const prediction = await replicate.predictions.create({
       version: SDXL_MODEL_VERSION.split(":")[1],
       input: {
@@ -132,15 +112,9 @@ async function generateImageWithReplicate(prompt: string, view: string, userId: 
         const supabaseUrl = await uploadToSupabase(replicateUrl, fileName, userId, supabase);
         
         if (supabaseUrl) {
-          // Cache the Supabase URL
-          imageCache[cacheKey] = {
-            timestamp: Date.now(),
-            urls: [supabaseUrl]
-          };
-          
           return supabaseUrl;
         }
-        
+
         // Fallback to Replicate URL if Supabase upload fails
         console.warn('[API Route] Failed to upload to Supabase, falling back to Replicate URL');
         return replicateUrl;
@@ -150,7 +124,7 @@ async function generateImageWithReplicate(prompt: string, view: string, userId: 
     } else {
       console.error(`[API Route] Prediction failed or unexpected format:`, result);
     }
-    
+
     return null;
   } catch (error) {
     console.error('[API Route] Error calling Replicate API:', error);
@@ -246,4 +220,4 @@ export async function POST(request: Request) {
     }
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
-} 
+}
