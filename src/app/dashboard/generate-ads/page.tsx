@@ -25,7 +25,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useToast } from "@/components/ui/use-toast";
 import ExpandedImageView from "@/components/dashboard/ExpandedImageView";
-import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils"; // Removed unused import
 
 // Define the structure of an Ad Draft, matching the backend
 interface AdDraft {
@@ -44,18 +44,18 @@ export default function GenerateAdsPage() {
   const [selectedDraft, setSelectedDraft] = useState<AdDraft | null>(null);
   const [isDraftDetailsOpen, setIsDraftDetailsOpen] = useState(false);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
-  const { toast } = useToast();
+  // const { toast } = useToast(); // Removed unused variable
 
   // Updated navigation items with correct paths
-  const navigationItems = [
-    { icon: Grid, label: "Overview", href: "/" },
-    { icon: Home, label: "Homepage", href: "/" },
-    { icon: Zap, label: "Generate Ads", href: "/generate-ads", active: true },
-    { icon: Facebook, label: "Facebook", href: "/facebook" },
-    { icon: Users, label: "Leads", href: "/leads" },
-    { icon: Settings, label: "Settings", href: "/settings" },
-    { icon: LogOut, label: "Logout", href: "/logout" },
-  ];
+  // const navigationItems = [ // Removed unused variable
+  //   { icon: Grid, label: "Overview", href: "/" },
+  //   { icon: Home, label: "Homepage", href: "/" },
+  //   { icon: Zap, label: "Generate Ads", href: "/generate-ads", active: true },
+  //   { icon: Facebook, label: "Facebook", href: "/facebook" },
+  //   { icon: Users, label: "Leads", href: "/leads" },
+  //   { icon: Settings, label: "Settings", href: "/settings" },
+  //   { icon: LogOut, label: "Logout", href: "/logout" },
+  // ];
 
   const fetchDrafts = async () => {
     setIsLoadingDrafts(true);

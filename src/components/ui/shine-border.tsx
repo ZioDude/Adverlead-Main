@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 interface ShinyBorderProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  borderWidth?: number;
+  // borderWidth?: number; // Removed unused prop
   duration?: number;
   className?: string;
   containerClassName?: string;
@@ -13,7 +13,7 @@ interface ShinyBorderProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function ShinyBorder({
   children,
-  borderWidth = 1,
+  // borderWidth = 1, // Removed unused prop
   duration = 2,
   className,
   containerClassName,

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import Replicate from 'replicate';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { createRouteHandlerClient, SupabaseClient } from '@supabase/auth-helpers-nextjs'; // Assuming SupabaseClient can be imported from here, or use '@supabase/supabase-js'
 import { cookies } from 'next/headers';
 
 // Debug: Log the API token status
@@ -26,7 +26,7 @@ function generatePlaceholderImage(prompt: string, view: string): string {
   return `https://picsum.photos/seed/${seed}${view.replace(/\s+/g, '')}/1024/1024`;
 }
 
-async function uploadToSupabase(imageUrl: string, fileName: string, userId: string, supabase: any) {
+async function uploadToSupabase(imageUrl: string, fileName: string, userId: string, supabase: SupabaseClient) {
   try {
     console.log(`[API Route] Attempting to upload image to Supabase Storage for user ${userId}`);
     
@@ -38,7 +38,7 @@ async function uploadToSupabase(imageUrl: string, fileName: string, userId: stri
     const imageBlob = await response.blob();
 
     // Upload to Supabase Storage
-    const { data, error } = await supabase.storage
+    const { data: _data, error } = await supabase.storage
       .from('ad-images')
       .upload(`${userId}/${fileName}`, imageBlob, {
         contentType: 'image/jpeg',
@@ -75,7 +75,7 @@ type ImageCache = {
 const imageCache: ImageCache = {};
 const CACHE_EXPIRY = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-async function generateImageWithReplicate(prompt: string, view: string, userId: string, supabase: any): Promise<string | null> {
+async function generateImageWithReplicate(prompt: string, view: string, userId: string, supabase: SupabaseClient): Promise<string | null> {
   console.log(`[API Route] Calling Replicate for prompt: ${prompt}`);
   try {
     // For faster testing/debugging - uncomment this to use placeholder images 

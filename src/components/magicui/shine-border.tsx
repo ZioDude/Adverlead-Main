@@ -7,7 +7,7 @@ interface ShineBorderProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   duration?: number;
   shineColor?: string | string[];
-  borderWidth?: number;
+  // borderWidth?: number; // Removed unused prop
   className?: string;
   containerClassName?: string;
 }
@@ -16,7 +16,7 @@ export function ShineBorder({
   children,
   duration = 14,
   shineColor = "rgba(168, 85, 247, 0.4)", // More subtle purple
-  borderWidth = 1,
+  // borderWidth = 1, // Removed unused prop
   className,
   containerClassName,
   ...props
