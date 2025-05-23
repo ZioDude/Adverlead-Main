@@ -4,10 +4,11 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
+// import { Input } from '@/components/ui/input'; // Removed unused import
+// import { Label } from '@/components/ui/label'; // Removed unused import
+// import { Slider } from '@/components/ui/slider'; // Removed unused import
 import { Download, Upload, RotateCcw } from 'lucide-react';
+import NextImage from 'next/image'; // Aliased import for next/image
 import { toast } from '@/components/ui/use-toast';
 import ToolPanel from './ToolPanel';
 import PropertiesPanel from './PropertiesPanel';
@@ -272,7 +273,7 @@ export default function ImageEditor({
       // Note: setIsProcessing(false) for directOutputMode is handled after processImage completes
     };
 
-    img.onerror = (e) => {
+    img.onerror = (e: Event | string) => { // Explicitly type 'e'
       cleanupTimeout();
       console.error('[ImageEditor] Base img.onerror triggered for URL:', url, 'Error event:', e);
       toast({ title: "Error", description: "Failed to load base image.", variant: "destructive" });
@@ -433,13 +434,16 @@ export default function ImageEditor({
               </Button>
             </div>
           </div>
-          <div className="border-2 border-dashed border-gray-200 rounded-lg p-4 min-h-96 flex items-center justify-center">
+          <div className="border-2 border-dashed border-gray-200 rounded-lg p-4 min-h-96 flex items-center justify-center bg-muted">
             {imageData.processedImageUrl ? (
-              <div className="w-full h-full overflow-hidden rounded-lg flex items-center justify-center"> 
-                <img
+              <div className="w-full h-full relative"> {/* Added relative for fill */}
+                <NextImage
                   src={imageData.processedImageUrl}
                   alt="Processed"
-                  className="max-w-full max-h-full object-contain"
+                  fill
+                  className="object-contain"
+                  unoptimized={imageData.processedImageUrl.startsWith('data:')} // Unoptimize for data URLs
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 50vw"
                 />
               </div>
             ) : (

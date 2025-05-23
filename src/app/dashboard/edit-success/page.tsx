@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image'; // Import next/image
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { DownloadIcon, Edit3Icon, ArrowLeftIcon } from 'lucide-react';
@@ -91,8 +92,15 @@ export default function EditSuccessPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="border rounded-lg overflow-hidden">
-            <img src={imageDataUrl} alt="Processed Ad Image" className="w-full h-auto object-contain" />
+          <div className="border rounded-lg overflow-hidden aspect-video relative bg-muted"> {/* Added aspect-video and relative for fill */}
+            <Image 
+              src={imageDataUrl} 
+              alt="Processed Ad Image" 
+              fill 
+              className="object-contain" 
+              unoptimized={imageDataUrl.startsWith('data:')} // Unoptimize for data URLs
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button onClick={handleDownload} className="w-full sm:w-auto">

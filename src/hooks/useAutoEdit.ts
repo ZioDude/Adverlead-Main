@@ -38,9 +38,13 @@ export const useAutoEdit = () => {
       
       setEditedImage(editedImageUrl);
       return editedImageUrl; // Return for immediate use if needed
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Auto-edit failed in useAutoEdit:', err);
-      setError(err.message || 'An unknown error occurred during image editing.');
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred during image editing.');
+      }
       throw err; // Re-throw to allow caller to handle
     } finally {
       setIsEditing(false);

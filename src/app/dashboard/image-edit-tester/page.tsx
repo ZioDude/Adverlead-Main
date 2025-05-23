@@ -2,7 +2,7 @@
 
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+// import { Input } from '@/components/ui/input'; // Removed unused import
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, AlertTriangle, ImagePlus, UploadCloud } from 'lucide-react';
 import Image from 'next/image';

@@ -13,8 +13,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Descriptive prompt to be used with a mask
-const PREDEFINED_EDIT_PROMPT = "Take the provided image of a modern house. Apply a subtle, dark, semi-transparent overlay filter to the entire image. The house and its surroundings should remain clearly visible and unchanged in structure, with the filter enhancing it as a background for text.";
+// const PREDEFINED_EDIT_PROMPT = "Take the provided image of a modern house. Apply a subtle, dark, semi-transparent overlay filter to the entire image. The house and its surroundings should remain clearly visible and unchanged in structure, with the filter enhancing it as a background for text.";
 
 interface RequestBody {
   imageUrl: string; // URL of the original image from Supabase

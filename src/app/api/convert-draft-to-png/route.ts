@@ -2,18 +2,18 @@ import { NextResponse } from 'next/server';
 import { createRouteHandlerClient, SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import sharp from 'sharp';
-import OpenAI from 'openai'; // For OpenAI.toFile if needed, though not directly for OpenAI API here
+// import OpenAI from 'openai'; // Removed unused import
 
 // Define the structure of an Ad Draft, matching the backend
-interface AdDraft {
-  id: string;
-  user_id: string;
-  industry: string | null;
-  house_style: string | null;
-  generated_images: { view: string; src: string; alt: string }[];
-  created_at?: string;
-  // Consider adding a field like image_format: 'jpeg' | 'png' in the future
-}
+// interface AdDraft { // Removed unused interface
+//   id: string;
+//   user_id: string;
+//   industry: string | null;
+//   house_style: string | null;
+//   generated_images: { view: string; src: string; alt: string }[];
+//   created_at?: string;
+//   // Consider adding a field like image_format: 'jpeg' | 'png' in the future
+// }
 
 interface GeneratedImageEntry {
   view: string;

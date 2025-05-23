@@ -53,7 +53,11 @@ export class CanvasEditor {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      let timer: NodeJS.Timeout;
+      const timer: NodeJS.Timeout = setTimeout(() => { // Initialize with const
+        img.onload = null; // Prevent late load from resolving
+        img.onerror = null; // Prevent late error from rejecting
+        reject(new Error(`Image load timed out for: ${src}`));
+      }, timeout);
 
       img.onload = () => {
         clearTimeout(timer);
@@ -66,12 +70,7 @@ export class CanvasEditor {
       };
       
       img.src = src;
-
-      timer = setTimeout(() => {
-        img.onload = null; // Prevent late load from resolving
-        img.onerror = null; // Prevent late error from rejecting
-        reject(new Error(`Image load timed out for: ${src}`));
-      }, timeout);
+      // Timer is already initialized above
     });
   }
 

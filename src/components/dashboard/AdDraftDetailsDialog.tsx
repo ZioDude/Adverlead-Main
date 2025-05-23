@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Download, ExternalLink, Maximize2, RefreshCw, AlertCircle, Loader2 } from "lucide-react"; // Added Loader2
+import { Download, ExternalLink, Maximize2, RefreshCw, Loader2 } from "lucide-react"; // Added Loader2, Removed AlertCircle
 import Image from "next/image";
 import { useToast } from "@/components/ui/use-toast"; // For showing feedback
 
