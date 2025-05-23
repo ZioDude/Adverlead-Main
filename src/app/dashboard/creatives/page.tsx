@@ -93,7 +93,7 @@ export default function CreativesPage() {
         {!isLoading && !error && creatives.length === 0 && (
           <div className="p-6 border rounded-lg bg-card text-card-foreground text-center">
             <p className="text-muted-foreground">
-              You haven't generated any creatives yet. Click the button above to get started!
+              You haven&apos;t generated any creatives yet. Click the button above to get started!
             </p>
           </div>
         )}

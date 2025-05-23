@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import {
   Dialog,
   DialogContent,
@@ -37,19 +38,15 @@ export function CreateCreativeModal({ isOpen, onClose }: CreateCreativeModalProp
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [uploadedLogoUrl, setUploadedLogoUrl] = useState<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [websiteText, setWebsiteText] = useState<string>('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [editedBrandedImage, setEditedBrandedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null); // Combined error state
   const { toast } = useToast();
 
-  const { autoEditImage, isEditing: isAutoEditing, error: autoEditErrorHook, setEditedImage: setEditedImageFromHook, setError: setErrorFromHook } = useAutoEdit();
+  const { autoEditImage, isEditing: isAutoEditing, error: autoEditErrorHook, setError: setErrorFromHook } = useAutoEdit();
 
   const renovationStyles = [
     { id: 'modern-house', label: 'Modern House', icon: <Home className="mr-2 h-5 w-5" />, promptLabel: "Modern House" },
@@ -226,7 +223,7 @@ export function CreateCreativeModal({ isOpen, onClose }: CreateCreativeModalProp
             <div>
               <Label htmlFor="logo-upload" className="mb-2 block font-medium">Upload Your Logo</Label>
               <Input id="logo-upload" type="file" accept="image/*" onChange={handleLogoUpload} />
-              {uploadedLogoUrl && <img src={uploadedLogoUrl} alt="Uploaded logo preview" className="mt-2 h-16 w-auto border rounded" />}
+              {uploadedLogoUrl && <Image src={uploadedLogoUrl} alt="Uploaded logo preview" width={64} height={64} className="mt-2 h-16 w-auto border rounded object-contain" />}
             </div>
             <div>
               <Label htmlFor="website-url" className="mb-2 block font-medium">Your Website URL</Label>
@@ -252,11 +249,11 @@ export function CreateCreativeModal({ isOpen, onClose }: CreateCreativeModalProp
               {generatedImages.length > 0 ? (
                 <div className="flex space-x-2">
                   {editedBrandedImage && (
-                    <img src={editedBrandedImage} alt="Branded Creative" className="h-56 w-auto object-contain rounded-md border" />
+                    <Image src={editedBrandedImage} alt="Branded Creative" width={224} height={224} className="h-56 w-auto object-contain rounded-md border" />
                   )}
                   {generatedImages.map((img, index) => (
                     (editedBrandedImage && index === 0) ? null : // Skip first original if branded one is shown
-                    <img key={img.src + index} src={img.src} alt={img.alt} className="h-56 w-auto object-contain rounded-md border" />
+                    <Image key={img.src + index} src={img.src} alt={img.alt} width={224} height={224} className="h-56 w-auto object-contain rounded-md border" />
                   ))}
                 </div>
               ) : (
