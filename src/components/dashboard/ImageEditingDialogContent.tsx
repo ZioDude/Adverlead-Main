@@ -93,7 +93,7 @@ export default function ImageEditingDialogContent({ onClose }: ImageEditingDialo
           // Call autoEditImage without custom options to use the defaults from CanvasEditor
           await autoEditImage(imageUrl);
           setCurrentStep("showResult");
-        } catch (_err) { // Changed err to _err as it's not directly used
+        } catch { // Removed unused _err parameter
           // Error is already set by useAutoEdit hook, can show toast here
           toast({
             title: "Editing Failed",
