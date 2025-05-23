@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Download, ExternalLink, Maximize2 } from "lucide-react";
+import { Download, ExternalLink, Maximize2, RefreshCw, AlertCircle, Loader2 } from "lucide-react"; // Added Loader2
 import Image from "next/image";
+import { useToast } from "@/components/ui/use-toast"; // For showing feedback
 
 interface AdDraft {
   id: string;
@@ -32,6 +33,9 @@ export default function AdDraftDetailsDialog({
   onExpandImage
 }: AdDraftDetailsDialogProps) {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
+  const [isConverting, setIsConverting] = useState(false);
+  const [conversionStatus, setConversionStatus] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const { toast } = useToast();
 
   if (!draft) return null;
 
@@ -59,19 +63,83 @@ export default function AdDraftDetailsDialog({
     }));
   };
 
+  const handleConvertToPng = async () => {
+    if (!draft) return;
+    setIsConverting(true);
+    setConversionStatus(null);
+    try {
+      const response = await fetch('/api/convert-draft-to-png', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ draftId: draft.id }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || result.details || 'Conversion failed');
+      }
+      setConversionStatus({ message: result.message || 'Successfully converted to PNG and new draft created!', type: 'success' });
+      toast({
+        title: "Conversion Successful",
+        description: result.message || "A new draft with PNG images has been created.",
+        variant: "default",
+      });
+      // Optionally close dialog or refresh drafts list (more complex)
+      // onClose(); // Example: close dialog on success
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred during conversion.";
+      setConversionStatus({ message: errorMessage, type: 'error' });
+      toast({
+        title: "Conversion Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setIsConverting(false);
+    }
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) {
+        setConversionStatus(null); // Clear status when dialog closes
+        // setIsConverting(false); // Already handled by finally
+      }
+      onClose();
+    }}>
       <DialogContent className="max-w-4xl p-0">
         <DialogHeader className="p-6 pb-0">
-          <DialogTitle className="text-2xl font-bold">
-            {draft.industry} {draft.house_style ? `- ${draft.house_style}` : ''}
-          </DialogTitle>
-          <p className="text-sm text-muted-foreground mt-2">
-            Created on {new Date(draft.created_at).toLocaleDateString()}
-          </p>
+          <div className="flex justify-between items-start">
+            <div>
+              <DialogTitle className="text-2xl font-bold">
+                {draft.industry} {draft.house_style ? `- ${draft.house_style}` : ''}
+              </DialogTitle>
+              <p className="text-sm text-muted-foreground mt-1">
+                Created on {new Date(draft.created_at).toLocaleDateString()}
+              </p>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleConvertToPng} 
+              disabled={isConverting}
+              className="ml-auto"
+            >
+              {isConverting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="mr-2 h-4 w-4" />
+              )}
+              Convert to PNGs
+            </Button>
+          </div>
         </DialogHeader>
         
         <div className="p-6">
+          {conversionStatus && (
+            <div className={`mb-4 p-3 rounded-md text-sm ${conversionStatus.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+              {conversionStatus.message}
+            </div>
+          )}
           <Carousel className="w-full max-w-3xl mx-auto">
             <CarouselContent>
               {draft.generated_images.map((image) => (
@@ -131,4 +199,4 @@ export default function AdDraftDetailsDialog({
       </DialogContent>
     </Dialog>
   );
-} 
+}

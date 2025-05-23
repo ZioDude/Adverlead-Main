@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   PlusCircle,
-  Zap
+  Edit3, // Added for Image Editing card
+  FileText // Added for Ad Copy Creation card
   // Grid, // Removed unused import
   // Home, // Removed unused import
   // Facebook, // Removed unused import
@@ -20,6 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import AdvancedAdBuilderDialogContent from "@/components/dashboard/AdvancedAdBuilderDialogContent";
+import ImageEditingDialogContent from "@/components/dashboard/ImageEditingDialogContent"; // Import new dialog
 import AdDraftDetailsDialog from "@/components/dashboard/AdDraftDetailsDialog";
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -44,6 +46,7 @@ export default function GenerateAdsPage() {
   const [selectedDraft, setSelectedDraft] = useState<AdDraft | null>(null);
   const [isDraftDetailsOpen, setIsDraftDetailsOpen] = useState(false);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
+  const [isImageEditingOpen, setIsImageEditingOpen] = useState(false); // State for new dialog
   // const { toast } = useToast(); // Removed unused variable
 
   // Updated navigation items with correct paths
@@ -119,59 +122,68 @@ export default function GenerateAdsPage() {
 
         {/* Action Cards Grid */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-16">
-          {/* Quick Ad Generation */}
-          <div className="group relative rounded-xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/5 p-6 hover:border-[#bf5af2]/20 transition-colors">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-white">Quick Ad Generation</h2>
-              <Zap className="h-6 w-6 text-[#bf5af2]" />
-            </div>
-            <p className="mb-6 text-sm text-zinc-400">
-              Generate a new ad quickly using our AI-powered templates. Perfect for rapid testing and iteration.
-            </p>
-            <Button 
-              variant="outline" 
-              className="w-full bg-transparent border-white/10 hover:bg-[#bf5af2] hover:text-white transition-colors rounded-lg"
-            >
-              Start Quick Generation <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
-
-          {/* Advanced Ad Builder */}
-          <div 
+          {/* Card 1: Image Generation (Previously Advanced Ad Builder) */}
+          <div
             onClick={() => setIsAdvancedBuilderOpen(true)}
             className="group relative rounded-xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/5 p-6 hover:border-[#bf5af2]/20 transition-colors cursor-pointer"
           >
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-white">Advanced Ad Builder</h2>
+              <h2 className="text-xl font-semibold text-white">Image Generation</h2>
               <div className="h-8 w-8 rounded-full bg-[#bf5af2]/10 flex items-center justify-center">
                 <PlusCircle className="h-5 w-5 text-[#bf5af2] group-hover:rotate-90 transition-transform duration-300" />
               </div>
             </div>
             <p className="mb-6 text-sm text-zinc-400">
-              Use the advanced builder for full control over your ad creatives and targeting options.
+              Create stunning, unique images for your ad campaigns using our advanced AI generator.
             </p>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="w-full bg-transparent border-white/10 hover:bg-[#bf5af2] hover:text-white transition-colors rounded-lg pointer-events-none"
             >
-              Open Advanced Builder <ArrowRight className="ml-2 h-4 w-4" />
+              Start Generation <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
 
-          {/* View Ad Templates */}
-          <div className="group relative rounded-xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/5 p-6 hover:border-[#bf5af2]/20 transition-colors">
+          {/* Card 2: Image Editing */}
+          <div
+            onClick={() => setIsImageEditingOpen(true)} // Make card clickable
+            className="group relative rounded-xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/5 p-6 hover:border-[#bf5af2]/20 transition-colors cursor-pointer"
+          >
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-white">View Ad Templates</h2>
-              <ArrowRight className="h-6 w-6 text-[#bf5af2]" />
+              <h2 className="text-xl font-semibold text-white">Image Editing</h2>
+              <div className="h-8 w-8 rounded-full bg-[#bf5af2]/10 flex items-center justify-center">
+                <Edit3 className="h-5 w-5 text-[#bf5af2]" />
+              </div>
             </div>
             <p className="mb-6 text-sm text-zinc-400">
-              Browse and manage your saved ad templates and creatives. Reuse successful designs.
+              Refine and enhance your generated or uploaded images with powerful editing tools. (Coming Soon)
             </p>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
+              // disabled // No longer disabled, whole card is trigger
+              className="w-full bg-transparent border-white/10 hover:bg-[#bf5af2] hover:text-white transition-colors rounded-lg pointer-events-none"
+            >
+              Start Editing <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Card 3: Ad Copy Creation (New Placeholder) */}
+          <div className="group relative rounded-xl overflow-hidden bg-black/20 backdrop-blur-sm border border-white/5 p-6 hover:border-[#bf5af2]/20 transition-colors">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-white">Ad Copy Creation</h2>
+              <div className="h-8 w-8 rounded-full bg-[#bf5af2]/10 flex items-center justify-center">
+                <FileText className="h-5 w-5 text-[#bf5af2]" />
+              </div>
+            </div>
+            <p className="mb-6 text-sm text-zinc-400">
+              Generate compelling and high-converting ad copy tailored to your campaign goals. (Coming Soon)
+            </p>
+            <Button
+              variant="outline"
+              disabled // Placeholder, so disabled
               className="w-full bg-transparent border-white/10 hover:bg-[#bf5af2] hover:text-white transition-colors rounded-lg"
             >
-              Browse Templates <ArrowRight className="ml-2 h-4 w-4" />
+              Create Copy <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -209,7 +221,7 @@ export default function GenerateAdsPage() {
                   className="rounded-xl bg-black/20 backdrop-blur-sm border border-white/5 p-6 hover:border-[#bf5af2]/20 transition-colors cursor-pointer"
                   onClick={() => handleViewDetails(draft)}
                 >
-                  {draft.generated_images && draft.generated_images.length > 0 && (
+                  {draft.generated_images && draft.generated_images.length > 0 && draft.generated_images[0].src && typeof draft.generated_images[0].src === 'string' && draft.generated_images[0].src.trim() !== '' ? (
                     <div className="mb-4 h-48 w-full relative rounded-lg overflow-hidden">
                       <Image
                         src={draft.generated_images[0].src}
@@ -218,6 +230,10 @@ export default function GenerateAdsPage() {
                         className="object-cover transition-transform duration-500 hover:scale-110"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
+                    </div>
+                  ) : (
+                    <div className="mb-4 h-48 w-full relative rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+                      <p className="text-xs text-muted-foreground">No preview</p>
                     </div>
                   )}
                   <h3 className="text-lg font-semibold text-white truncate mb-2">
@@ -234,6 +250,24 @@ export default function GenerateAdsPage() {
       </div>
 
       {/* Dialogs */}
+      {/* Ad Builder Dialog (already exists) */}
+      {/* <Dialog open={isAdvancedBuilderOpen} onOpenChange={setIsAdvancedBuilderOpen}> ... </Dialog> 
+          Note: The Ad Builder Dialog is triggered by the "New Ad Campaign" button AND the "Image Generation" card.
+          The Dialog component for it is already part of the "Header Section" for the "New Ad Campaign" button.
+          The "Image Generation" card's onClick directly sets isAdvancedBuilderOpen.
+      */}
+
+      {/* Image Editing Dialog */}
+      <Dialog open={isImageEditingOpen} onOpenChange={setIsImageEditingOpen}>
+        {/* No explicit DialogTrigger here if card div handles opening */}
+        <DialogContent className="sm:max-w-lg p-0">
+          <DialogHeader className="p-6 pb-4">
+            <DialogTitle className="text-2xl font-bold text-center">Select Ad to Edit</DialogTitle>
+          </DialogHeader>
+          <ImageEditingDialogContent onClose={() => setIsImageEditingOpen(false)} />
+        </DialogContent>
+      </Dialog>
+
       <AdDraftDetailsDialog
         draft={selectedDraft}
         isOpen={isDraftDetailsOpen}

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, /*Megaphone,*/ Facebook, Users, Settings, LogOut, HomeIcon, Zap } from "lucide-react"; // Commented out Megaphone
+import { LayoutDashboard, /*Megaphone,*/ Facebook, Users, Settings, LogOut, HomeIcon, Zap, ImageIcon } from "lucide-react"; // Commented out Megaphone, Added ImageIcon
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 // Define navigation items for the dashboard sidebar
@@ -11,6 +11,7 @@ const dashboardNavItems = [
   { href: "/dashboard", label: "Overview", icon: <LayoutDashboard className="h-5 w-5" /> },
   { href: "/", label: "Homepage", icon: <HomeIcon className="h-5 w-5" /> },
   { href: "/dashboard/generate-ads", label: "Generate Ads", icon: <Zap className="h-5 w-5" /> },
+  { href: "/dashboard/image-editor", label: "Image Editor", icon: <ImageIcon className="h-5 w-5" /> },
   { href: "/dashboard/campaigns", label: "Facebook", icon: <Facebook className="h-5 w-5" /> }, // Assuming Facebook maps to Campaigns
   { href: "/dashboard/leads", label: "Leads", icon: <Users className="h-5 w-5" /> },
 ];
@@ -94,4 +95,4 @@ export default function Sidebar() {
       </div>
     </aside>
   );
-} 
+}
