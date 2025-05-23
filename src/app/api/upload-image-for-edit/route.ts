@@ -41,14 +41,11 @@ async function uploadFileToSupabase(
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = cookies();
+    // Pass the cookies function directly to the Supabase client
+    const supabase = createRouteHandlerClient({ cookies });
 
-    // Introduce an explicit await before Supabase client creation and session retrieval.
-    // This yields to the event loop and might help Next.js set up its dynamic context.
-    await new Promise(resolve => setTimeout(resolve, 0));
-
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
-
+    // It's good practice to await getSession() immediately after client creation
+    // if session data is needed right away.
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

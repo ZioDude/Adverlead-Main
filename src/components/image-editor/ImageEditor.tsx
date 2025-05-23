@@ -184,7 +184,9 @@ export default function ImageEditor({
       console.log('[ImageEditor] finalizeProcessing. directOutputMode:', directOutputMode);
       if (directOutputMode && onProcessingComplete) {
         generateOutput();
+        // onDone will be called by the processImage caller if directOutputMode
       } else {
+        // Interactive mode
         canvas.toBlob(blob => {
           if (blob) {
             const url = URL.createObjectURL(blob);
@@ -192,10 +194,22 @@ export default function ImageEditor({
               if (prev.processedImageUrl) URL.revokeObjectURL(prev.processedImageUrl);
               return { ...prev, processedImageUrl: url };
             });
+          } else {
+            console.error('[ImageEditor] canvas.toBlob() returned null. This might be due to a tainted canvas (CORS issue with the source image).');
+            toast({
+              title: "Processing Error",
+              description: "Could not generate image preview. The source image might have loading restrictions (CORS).",
+              variant: "destructive",
+            });
+            // Clear any potentially stale processed image URL
+            setImageData(prev => ({ ...prev, processedImageUrl: null }));
           }
+          // Ensure isProcessing is set to false after blob operation in interactive mode
+          setIsProcessing(false); 
         });
       }
-      if (onDone) onDone();
+      // Call onDone if provided (primarily for directOutputMode's setIsProcessing)
+      if (onDone) onDone(); 
     };
 
     if (state.logoUrl) {
@@ -316,11 +330,14 @@ export default function ImageEditor({
   useEffect(() => {
     if (imageData.originalImage && canvasRef.current) {
       console.log('[ImageEditor] useEffect (image/state change): Conditions met, calling processImage. directOutputMode:', directOutputMode);
+      // For interactive mode, setIsProcessing(false) is now handled within finalizeProcessing after toBlob.
+      // For directOutputMode, the onDone callback here will set isProcessing(false).
       processImage(imageData.originalImage, editorState, () => {
-        if (directOutputMode) {
-          console.log('[ImageEditor] processImage callback in directOutputMode: setIsProcessing(false)');
-          setIsProcessing(false); 
+        if (directOutputMode) { 
+          console.log('[ImageEditor] processImage onDone callback (directOutputMode): setIsProcessing(false)');
+          setIsProcessing(false);
         }
+        // For interactive mode, isProcessing is handled inside finalizeProcessing's toBlob callback
       });
     } else {
         if(!imageData.originalImage) console.log("[ImageEditor] useEffect (image/state change): No original image to process yet.");
@@ -436,7 +453,7 @@ export default function ImageEditor({
           </div>
           <div className="border-2 border-dashed border-gray-200 rounded-lg p-4 min-h-96 flex items-center justify-center bg-muted">
             {imageData.processedImageUrl ? (
-              <div className="w-full h-full relative"> {/* Added relative for fill */}
+              <div className="w-full h-96 relative"> {/* Changed h-full to h-96 */}
                 <NextImage
                   src={imageData.processedImageUrl}
                   alt="Processed"

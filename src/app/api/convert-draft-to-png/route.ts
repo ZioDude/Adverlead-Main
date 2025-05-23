@@ -55,8 +55,8 @@ async function uploadPngBufferToSupabase(
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    // Pass the cookies function directly to the Supabase client
+    const supabase = createRouteHandlerClient({ cookies });
 
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
